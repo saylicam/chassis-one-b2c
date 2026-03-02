@@ -35,35 +35,23 @@ export const images = {
     },
   },
   realisations: [
-    {
-      id: 1,
-      // Maison Brabant Wallon - style traditionnel
-      image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop&auto=format&q=80",
-    },
-    {
-      id: 2,
-      // Villa moderne
-      image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&h=600&fit=crop&auto=format&q=80",
-    },
-    {
-      id: 3,
-      // Porte d'entrée moderne
-      image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&h=600&fit=crop&auto=format&q=80",
-    },
-    {
-      id: 4,
-      // Volets roulants
-      image: "https://images.unsplash.com/photo-1600607688364-9e7b8b5e5e5e?w=800&h=600&fit=crop&auto=format&q=80",
-    },
-    {
-      id: 5,
-      // Rénovation énergétique - image différente
-      image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&h=600&fit=crop&auto=format&q=80",
-    },
-    {
-      id: 6,
-      // Villa contemporaine - image différente
-      image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&h=600&fit=crop&auto=format&q=80",
-    },
+    { id: 1, image: "/images/realisations/1.jpg" },
+    { id: 2, image: "/images/realisations/2.jpg" },
+    { id: 3, image: "/images/realisations/3.jpg" },
+    { id: 4, image: "/images/realisations/4.jpg" },
+    { id: 5, image: "/images/realisations/5.jpg" },
+    { id: 6, image: "/images/realisations/6.jpg" },
+    { id: 7, image: "/images/realisations/7.jpg" },
+    { id: 8, image: "/images/realisations/8.jpg" },
+    { id: 9, image: "/images/realisations/9.jpg" },
+    { id: 10, image: "/images/realisations/10.jpg" },
+    { id: 11, image: "/images/realisations/11.jpg" },
+    { id: 12, image: "/images/realisations/12.jpg" },
+    { id: 13, image: "/images/realisations/13.jpg" },
+    { id: 14, image: "/images/realisations/14.jpg" },
+    { id: 15, image: "/images/realisations/15.jpg" },
+    { id: 16, image: "/images/realisations/16.jpg" },
+    { id: 19, image: "/images/realisations/19.jpg" },
+    { id: 20, image: "/images/realisations/20.jpg" },
   ],
 };

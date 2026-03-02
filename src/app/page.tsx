@@ -7,6 +7,7 @@ import PrestigeStatsSection from "@/components/sections/PrestigeStatsSection";
 import HeritageSection from "@/components/sections/HeritageSection";
 import TrustSection from "@/components/sections/TrustSection";
 import InfiniteMarquee from "@/components/sliders/InfiniteMarquee";
+import ArtDetailSection from "@/components/sections/ArtDetailSection";
 import Footer from "@/components/sections/Footer";
 
 const testimonials = [
@@ -66,6 +67,7 @@ export default function Home() {
         <PrestigeStatsSection />
         <HeritageSection />
         <TrustSection />
+        <ArtDetailSection />
         <InfiniteMarquee testimonials={testimonials} speed={60} />
       </main>
       <Footer />

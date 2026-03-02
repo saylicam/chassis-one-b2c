@@ -3,6 +3,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
+// Suppression des icônes - non utilisées dans le nouveau design
+
 // ============================================
 // CONSTANTES
 // ============================================
@@ -94,7 +96,7 @@ const stats = [
   {
     value: 15,
     suffix: "",
-    label: "ANNÉES D'EXPÉRIENCE",
+    label: "SAVOIR-FAIRE ÉTABLI",
     icon: CompassIcon,
   },
   {
@@ -117,7 +119,7 @@ const TAGLINE = "L'exigence du détail, la force d'un ancrage local.";
 // HOOKS
 // ============================================
 
-function useCountUp(end: number, duration: number = 2000, start: number = 0, trigger: boolean) {
+function useCountUp(end: number, duration: number = 2500, start: number = 0, trigger: boolean) {
   const [count, setCount] = useState(start);
 
   useEffect(() => {
@@ -130,6 +132,7 @@ function useCountUp(end: number, duration: number = 2000, start: number = 0, tri
       const now = Date.now();
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
+      // Easing plus prononcé avec easeOutCubic
       const easeOut = 1 - Math.pow(1 - progress, 3);
       const current = Math.floor(startValue + (end - startValue) * easeOut);
 
@@ -159,51 +162,55 @@ interface StatItemProps {
 }
 
 function StatItem({ stat, index, isInView }: StatItemProps) {
-  const IconComponent = stat.icon;
-  const count = useCountUp(stat.value, 2000, 0, isInView);
-  const delay = index * 0.1;
+  const count = useCountUp(stat.value, 1200, 0, isInView);
+  const delay = index * 0.2;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay }}
-      className="flex flex-col items-center justify-center py-12 px-8 lg:px-16"
+      transition={{ duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="flex flex-col items-center justify-center py-8 lg:py-12"
     >
+      {/* Chiffre réduit, typo ultra-fine avec tracking-widest */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: delay + 0.2 }}
-        className="mb-6"
-      >
-        <IconComponent />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: delay + 0.3 }}
+        transition={{ duration: 1.2, delay: delay + 0.2, ease: [0.22, 1, 0.36, 1] }}
         className="mb-4"
       >
-        <span className="text-6xl lg:text-7xl xl:text-8xl font-extralight tracking-tight text-[#2563eb]">
+        <span 
+          className="text-4xl lg:text-5xl font-light text-[#1F2937] tracking-widest"
+          style={{ 
+            fontFamily: "var(--font-sans), system-ui, sans-serif",
+            fontWeight: 300,
+          }}
+        >
           {count}
         </span>
         {stat.suffix && (
-          <span className="text-4xl lg:text-5xl xl:text-6xl font-extralight tracking-tight text-[#2563eb]">
+          <span 
+            className="text-3xl lg:text-4xl font-light text-[#1F2937] tracking-widest"
+            style={{ 
+              fontFamily: "var(--font-sans), system-ui, sans-serif",
+              fontWeight: 300,
+            }}
+          >
             {stat.suffix}
           </span>
         )}
       </motion.div>
 
+      {/* Label en anthracite, font-light */}
       <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: delay + 0.4 }}
-        className="text-sm lg:text-base text-[#64748b] font-light uppercase tracking-wider text-center"
+        transition={{ duration: 1.2, delay: delay + 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="text-xs lg:text-sm text-[#1F2937] font-light uppercase tracking-widest"
+        style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
       >
         {stat.label}
       </motion.p>
@@ -222,23 +229,33 @@ export default function PrestigeStatsSection() {
   return (
     <section
       ref={ref}
-      className="relative bg-gradient-to-b from-white via-gray-50/30 to-white border-t border-b border-gray-100"
+      className="relative bg-[#f9f9f9] py-48 lg:py-64"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col lg:flex-row items-center justify-center divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
+      <div className="mx-auto max-w-7xl px-8 lg:px-16">
+        {/* Grille avec lignes de séparation blanches (effet plan d'architecte) */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-white/50">
           {stats.map((stat, index) => (
-            <StatItem key={index} stat={stat} index={index} isInView={isInView} />
+            <StatItem 
+              key={index}
+              stat={stat} 
+              index={index} 
+              isInView={isInView}
+            />
           ))}
         </div>
 
+        {/* Tagline sobre */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-center py-8 border-t border-gray-100"
+          transition={{ duration: 1.2, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mt-20"
         >
-          <p className="text-sm lg:text-base text-[#64748b] font-light italic">
+          <p 
+            className="text-sm lg:text-base text-[#1F2937]/60 font-light"
+            style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
+          >
             {TAGLINE}
           </p>
         </motion.div>

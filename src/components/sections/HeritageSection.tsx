@@ -1,171 +1,199 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { Heart, Eye, Award } from "lucide-react";
+import Link from "next/link";
+import { useRef } from "react";
 
-// Image placeholder pour l'atelier/équipe
-const teamImage = "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1200&h=800&fit=crop&auto=format&q=80";
-
-const values = [
-  {
-    icon: Heart,
-    title: "Proximité",
-    description: "Nous ne sommes pas une multinationale, nous sommes vos voisins.",
-  },
-  {
-    icon: Eye,
-    title: "Transparence",
-    description: "Pas de sous-traitance obscure. Nos poseurs sont nos propres experts.",
-  },
-  {
-    icon: Award,
-    title: "Qualité Sofarau",
-    description: "L'accès direct à la technologie Schüco via notre propre unité de production.",
-  },
+const pointsForts = [
+  "Expertise Schüco & Sofarau",
+  "Pose Artisanale Certifiée",
+  "Service de Proximité Wavrien",
 ];
 
 export default function HeritageSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax pour l'image
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+
   return (
     <section
+      ref={containerRef}
       id="heritage"
-      className="py-20 bg-white"
+      className="relative min-h-screen py-48 lg:py-64 bg-gradient-to-b from-white to-white/95 overflow-hidden"
     >
-      <div className="mx-auto max-w-7xl px-8 lg:px-16">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#0a0a0a] mb-4 leading-tight">
-            Plus qu'une entreprise, une signature brabançonne.
-          </h2>
-          <p className="text-lg text-[#64748b] max-w-2xl mx-auto font-light leading-relaxed">
-            Depuis plus de 15 ans, nous façonnons le confort des foyers de Wavre et ses environs.
-          </p>
-        </motion.div>
+      <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
+          {/* Colonne Gauche : Texte avec reveal latéral + ligne verticale */}
+          <div className="lg:col-span-2 relative">
+            {/* Ligne verticale discrète */}
+            <div className="absolute -left-8 top-0 bottom-0 w-px bg-[#1F2937]/10 hidden lg:block" />
+            
+            <div className="space-y-12">
+              {/* Titre avec reveal (taille réduite) */}
+              <motion.div
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="overflow-hidden"
+              >
+                <h2 
+                  className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-[#1F2937]"
+                  style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+                >
+                  Une signature brabançonne
+                </h2>
+              </motion.div>
 
-        {/* Split Layout - Two Columns */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
-          {/* Text Column */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="space-y-8"
-          >
-            <div className="space-y-6">
-              <p className="text-lg sm:text-xl text-[#475569] leading-relaxed font-light">
-                Née de la passion pour l'artisanat, Châssis One allie aujourd'hui la force d'une production industrielle locale (Sofarau) à la précision d'une pose artisanale.
-              </p>
-              <p className="text-lg sm:text-xl text-[#475569] leading-relaxed font-light">
-                Chaque projet est une histoire unique, chaque pose une signature de notre savoir-faire transmis de génération en génération. Nous ne construisons pas seulement des fenêtres, nous façonnons le confort et la sérénité de vos foyers.
-              </p>
-            </div>
-
-            {/* Signature épurée */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="pt-8 border-t border-[#e2e8f0]"
-            >
-              <div className="flex items-center gap-4">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#e2e8f0] to-transparent" />
-                <div className="text-[#64748b] font-light text-lg">
-                  L'équipe Châssis One
-                </div>
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#e2e8f0] to-transparent" />
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Image Column - Cadre épuré */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
-          >
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.4 }}
-              className="relative bg-white border border-[#e2e8f0] rounded-xl overflow-hidden"
-            >
-              <div className="relative rounded-xl overflow-hidden">
-                <Image
-                  src={teamImage}
-                  alt="L'équipe Châssis One devant l'atelier de Wavre"
-                  width={800}
-                  height={600}
-                  className="w-full h-auto object-cover"
-                  priority
-                />
-              </div>
-              {/* Label épuré */}
-              <div className="p-4 text-center border-t border-[#e2e8f0]">
-                <p className="text-[#64748b] font-light text-sm">
-                  Wavre, Brabant Wallon
+              {/* Paragraphe avec reveal */}
+              <motion.div
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="overflow-hidden"
+              >
+                <p 
+                  className="text-lg lg:text-xl text-[#1F2937] font-extralight leading-relaxed tracking-wider"
+                  style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 200 }}
+                >
+                  Née de la passion pour l'artisanat, Châssis One allie aujourd'hui la force d'une <strong className="font-medium">production locale</strong> (Sofarau) à la précision d'une <strong className="font-medium">pose artisanale</strong> pour un <strong className="font-medium">confort ultime</strong>.
                 </p>
-              </div>
+              </motion.div>
+
+              {/* Zone "En chiffres" */}
+              <motion.div
+                initial={{ opacity: 0, x: -100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="pt-4"
+              >
+                <p 
+                  className="text-[10px] font-light text-[#1F2937]/60 uppercase tracking-[0.2em]"
+                  style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
+                >
+                  25 ans de savoir-faire | +1500 projets réalisés
+                </p>
+              </motion.div>
+
+            {/* Points Forts ultra-minimaliste */}
+            <motion.div
+              initial={{ opacity: 0, x: -100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="space-y-6 pt-8"
+            >
+              {pointsForts.map((point, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.5 + index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex items-start gap-4"
+                >
+                  <span 
+                    className="text-sm font-light text-[#004aad] tracking-widest"
+                    style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
+                  >
+                    {String(index + 1).padStart(2, "0")}.
+                  </span>
+                  <p 
+                    className="text-sm font-light text-[#1F2937] tracking-wide"
+                    style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
+                  >
+                    {point}
+                  </p>
+                </motion.div>
+              ))}
             </motion.div>
+
+            {/* Boutons Ghost */}
+            <motion.div
+              initial={{ opacity: 0, x: -100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-wrap gap-4 pt-8"
+            >
+              <Link
+                href="/notre-histoire"
+                className="group relative inline-flex items-center gap-2 px-8 py-4 bg-transparent border border-[#1F2937]/30 rounded-sm overflow-hidden transition-all duration-300 hover:border-[#004aad]"
+              >
+                <span 
+                  className="relative z-10 text-sm font-light uppercase tracking-widest text-[#1F2937] group-hover:text-white transition-colors duration-300"
+                  style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
+                >
+                  Notre Histoire
+                </span>
+                <div className="absolute inset-0 bg-[#004aad] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              </Link>
+              <Link
+                href="/realisations"
+                className="group relative inline-flex items-center gap-2 px-8 py-4 bg-transparent border border-[#1F2937]/30 rounded-sm overflow-hidden transition-all duration-300 hover:border-[#004aad]"
+              >
+                <span 
+                  className="relative z-10 text-sm font-light uppercase tracking-widest text-[#1F2937] group-hover:text-white transition-colors duration-300"
+                  style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
+                >
+                  Notre Atelier
+                </span>
+                <div className="absolute inset-0 bg-[#004aad] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              </Link>
+            </motion.div>
+            </div>
+          </div>
+
+          {/* Colonne Droite : Image 60% avec parallax et effet cadre d'exposition */}
+          <motion.div
+            style={{ 
+              y: imageY,
+              boxShadow: "inset 0 0 60px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05)",
+            }}
+            className="lg:col-span-3 relative h-[600px] lg:h-[800px] overflow-hidden rounded-sm"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1920&h=1080&fit=crop&auto=format&q=95"
+              alt="Atelier Châssis One - Réalisation"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 1024px) 100vw, 60vw"
+              priority
+              quality={95}
+            />
           </motion.div>
         </div>
 
-
-        {/* Valeurs & Engagements - Bento Grid épurée */}
+        {/* Logos Partenaires en bas (opacité 40%) */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-24 pt-16 border-t border-[#1F2937]/10"
         >
-          <div className="text-center mb-16">
-            <h3 className="text-3xl lg:text-4xl font-bold tracking-tight text-[#0a0a0a] mb-4">
-              Nos Valeurs & Engagements
-            </h3>
-            <p className="text-lg text-[#64748b] font-light">
-              Ce qui nous définit, ce qui nous guide
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {values.map((value, index) => {
-              const IconComponent = value.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+          <div className="flex flex-wrap items-center justify-center gap-12 lg:gap-16">
+            {["Schüco", "Sofarau", "Saint-Gobain"].map((partner, index) => (
+              <div
+                key={partner}
+                className="opacity-40"
+              >
+                <p 
+                  className="text-lg font-light text-[#1F2937] tracking-wider"
+                  style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
                 >
-                  <motion.div
-                    whileHover={{ y: -4 }}
-                    transition={{ duration: 0.3 }}
-                    className="h-full rounded-xl p-8 bg-white border border-[#e2e8f0] hover:border-[#cbd5e1] transition-colors"
-                  >
-                    <div className="flex justify-center mb-6">
-                      <div className="w-12 h-12 rounded-lg border border-[#e2e8f0] bg-white flex items-center justify-center">
-                        <IconComponent className="h-6 w-6 text-[#64748b] stroke-[1.5]" />
-                      </div>
-                    </div>
-                    <h4 className="text-2xl font-bold tracking-tight text-[#0a0a0a] mb-4 text-center">
-                      {value.title}
-                    </h4>
-                    <p className="text-[#64748b] text-lg font-light leading-relaxed text-center">
-                      {value.description}
-                    </p>
-                  </motion.div>
-                </motion.div>
-              );
-            })}
+                  {partner}
+                </p>
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-ui",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -93,7 +93,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body
-        className={`${plusJakarta.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
+        className={`${inter.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         {children}
       </body>
