@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import LeafletShowroomMap from "./LeafletShowroomMap";
 
@@ -141,7 +141,7 @@ function ContactForm() {
   const [sujet, setSujet] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const subject = encodeURIComponent(sujet || "Contact depuis le site");
     const body = encodeURIComponent(

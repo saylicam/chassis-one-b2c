@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { ArrowRight, Mail, Phone } from "lucide-react";
@@ -17,7 +16,7 @@ export default function ContactPage() {
   const [telephone, setTelephone] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const subject = encodeURIComponent("Contact depuis le site Châssis One");
     const body = encodeURIComponent(

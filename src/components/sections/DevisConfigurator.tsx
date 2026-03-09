@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState, type ComponentType, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -127,7 +127,7 @@ const vitrageCards: {
   id: VitrageId;
   label: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
 }[] = [
   {
     id: "isolation",
@@ -179,7 +179,7 @@ const accessoireCards: {
   id: AccessoireId;
   label: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
 }[] = [
   {
     id: "moustiquaire",
@@ -199,7 +199,7 @@ const projectCards: {
   id: ProjectId;
   label: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
 }[] = [
   { id: "renovation", label: "Rénovation", description: "Remplacement, performance énergétique, finitions.", icon: ArrowRight },
   { id: "neuf", label: "Nouvelle construction", description: "Projet complet, optimisation dès la conception.", icon: Check },
@@ -228,7 +228,7 @@ function LineField({
   onBlur,
 }: {
   label: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   value: string;
   placeholder: string;
   error?: string;

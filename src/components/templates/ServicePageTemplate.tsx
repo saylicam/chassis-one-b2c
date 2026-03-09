@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type ElementType } from "react";
 import { ArrowRight, CheckCircle, Thermometer, Shield, Sparkles, Zap, Lock, Sun, DollarSign, Volume2, LockKeyhole, Palette, Award, Users, Headphones, FileText, ChevronRight, Home } from "lucide-react";
 import { realisationProjects } from "@/data/realisations";
 import Button from "@/components/ui/Button";
@@ -36,7 +36,7 @@ const itemVariants = {
 };
 
 interface Benefit {
-  icon: React.ElementType;
+  icon: ElementType;
   title: string;
   description: string;
 }
@@ -53,7 +53,7 @@ interface EditorialBlock {
 }
 
 interface KeyBenefit {
-  icon: React.ElementType;
+  icon: ElementType;
   title: string;
   description: string;
 }
