@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
@@ -198,66 +199,88 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile: bouton burger — trois barres noires, bien visible à droite */}
+          {/* Mobile: hamburger visible sur Hero (backdrop + ombre) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2.5 -m-1 text-[#000000] hover:bg-gray-100 rounded-lg transition-colors"
+            className="md:hidden p-2.5 -m-1 rounded-lg transition-colors bg-white/90 backdrop-blur-sm shadow-md text-[#0f172a] hover:bg-white"
             aria-label={isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
       </div>
 
-      {/* Mobile Navigation — overlay plein écran, fond blanc opaque */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-[#FFFFFF] md:hidden flex flex-col"
-          >
-            {/* Fermer */}
-            <div className="flex justify-end p-4">
-              <button
+      {/* Mobile Navigation — side drawer via portal (slides from right) */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {/* Backdrop: dark semi-transparent, closes menu on click */}
+            {isMobileMenuOpen && (
+              <motion.div
+                key="drawer-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 z-[9999] md:hidden bg-black/50"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 text-[#000000] hover:bg-gray-100 rounded-lg"
-                aria-label="Fermer le menu"
+                aria-hidden
+              />
+            )}
+            {isMobileMenuOpen && (
+              <motion.div
+                key="drawer-panel"
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "tween", duration: 0.3, ease: "easeOut" }}
+                className="fixed top-0 right-0 bottom-0 w-[75%] max-w-[320px] z-[10000] md:hidden flex flex-col bg-[#f8fafc] shadow-xl"
               >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
+                  {/* Header: site name + X close */}
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+                    <span className="text-lg font-semibold text-[#0f172a]">Châssis One</span>
+                    <button
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="p-2 rounded-lg text-[#0f172a] hover:bg-slate-200 transition-colors"
+                      aria-label="Fermer le menu"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
 
-            {/* Liste verticale centrée — noir, 20px */}
-            <nav className="flex-1 flex flex-col items-center justify-center gap-2 px-6">
-              {mobileMenuItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-[#000000] text-[20px] font-normal py-3 hover:opacity-70 transition-opacity"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+                  {/* Nav links */}
+                  <nav className="flex-1 overflow-y-auto px-4 py-4">
+                    <ul className="flex flex-col">
+                      {mobileMenuItems.map((item) => (
+                        <li key={item.href} className="border-b border-slate-200 last:border-b-0">
+                          <Link
+                            href={item.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="block py-4 text-lg text-[#0f172a] hover:text-[#1e40af] transition-colors"
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
 
-            {/* Bouton Contact — tout en bas, large, bleu comme sur PC */}
-            <div className="p-6">
-              <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="block">
-                <motion.button
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#1e40af] hover:bg-[#1e3a8a] text-white text-sm font-medium rounded-lg shadow-sm transition-colors"
-                >
-                  CONTACT
-                  <ArrowRight className="h-4 w-4" />
-                </motion.button>
-              </Link>
-            </div>
-          </motion.div>
+                  {/* Contact button — full width, blue */}
+                  <div className="p-4 border-t border-slate-200">
+                    <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="block">
+                      <motion.button
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1e40af] hover:bg-[#1e3a8a] text-white text-base font-semibold rounded-lg transition-colors"
+                      >
+                        Contact
+                        <ArrowRight className="h-4 w-4" />
+                      </motion.button>
+                    </Link>
+                  </div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </nav>
   );
 }
