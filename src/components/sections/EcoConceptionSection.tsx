@@ -8,10 +8,11 @@ import { ArrowRight } from "lucide-react";
 export default function EcoConceptionSection() {
   return (
     <section className="relative min-h-[500px] lg:min-h-[600px] overflow-hidden bg-white">
-      <div className="grid lg:grid-cols-2 h-full min-h-[500px] lg:min-h-[600px]">
+      {/* Version desktop uniquement : image et texte côte à côte */}
+      <div className="hidden lg:grid lg:grid-cols-2 h-full min-h-[500px] lg:min-h-[600px]">
         {/* GAUCHE (50%) - Image */}
         <motion.div
-          className="relative hidden lg:block overflow-hidden"
+          className="relative overflow-hidden"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

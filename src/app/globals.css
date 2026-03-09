@@ -182,6 +182,12 @@ html {
   letter-spacing: 0.01em;
 }
 
+/* Navbar border — évite une classe Tailwind qui génère un sélecteur invalide (md:border-b) */
+.nav-bar-border {
+  border-bottom-width: 1px;
+  border-bottom-color: var(--color-gray-100, #f1f5f9);
+}
+
 /* Badge Garantie Artisanale */
 .badge-artisanale {
   display: inline-flex;

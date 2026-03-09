@@ -7,8 +7,8 @@ const footerLinks = {
   solutions: [
     { label: "Châssis PVC", href: "/pvc" },
     { label: "Châssis Aluminium", href: "/alu" },
-    { label: "Portes d'Entrée", href: "/portes" },
     { label: "Volets Roulants", href: "/volets" },
+    { label: "Portes d'Entrée", href: "/portes" },
   ],
   navigation: [
     { label: "À propos", href: "#apropos" },

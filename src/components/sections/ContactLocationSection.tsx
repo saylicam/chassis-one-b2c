@@ -113,7 +113,120 @@ export default function ContactLocationSection() {
             </a>
           </motion.div>
         </div>
+
+        {/* Formulaire de contact minimaliste — destination info@chassisone.com */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-16 lg:mt-24 max-w-2xl mx-auto"
+        >
+          <h3 className="text-xl font-light text-[#0a0a0a] mb-8 text-center" style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
+            Nous écrire
+          </h3>
+          <ContactForm />
+        </motion.div>
       </div>
     </section>
+  );
+}
+
+const CONTACT_EMAIL = "info@chassisone.com";
+
+function ContactForm() {
+  const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [sujet, setSujet] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(sujet || "Contact depuis le site");
+    const body = encodeURIComponent(
+      [
+        `Nom : ${nom}`,
+        `E-mail : ${email}`,
+        `Téléphone : ${telephone}`,
+        `Sujet : ${sujet}`,
+        "",
+        message,
+      ].join("\n")
+    );
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <label className="block">
+          <span className="sr-only">Nom</span>
+          <input
+            type="text"
+            required
+            placeholder="Nom"
+            value={nom}
+            onChange={(e) => setNom(e.target.value)}
+            className="w-full px-4 py-3 bg-white border border-[#e5e5e5] rounded text-[#0a0a0a] text-sm font-light placeholder:text-[#94a3b8] focus:outline-none focus:border-[#1e40af] transition-colors"
+            style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+          />
+        </label>
+        <label className="block">
+          <span className="sr-only">E-mail</span>
+          <input
+            type="email"
+            required
+            placeholder="E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 bg-white border border-[#e5e5e5] rounded text-[#0a0a0a] text-sm font-light placeholder:text-[#94a3b8] focus:outline-none focus:border-[#1e40af] transition-colors"
+            style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+          />
+        </label>
+      </div>
+      <label className="block">
+        <span className="sr-only">Téléphone</span>
+        <input
+          type="tel"
+          placeholder="Téléphone"
+          value={telephone}
+          onChange={(e) => setTelephone(e.target.value)}
+          className="w-full px-4 py-3 bg-white border border-[#e5e5e5] rounded text-[#0a0a0a] text-sm font-light placeholder:text-[#94a3b8] focus:outline-none focus:border-[#1e40af] transition-colors"
+          style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+        />
+      </label>
+      <label className="block">
+        <span className="sr-only">Sujet</span>
+        <input
+          type="text"
+          required
+          placeholder="Sujet"
+          value={sujet}
+          onChange={(e) => setSujet(e.target.value)}
+          className="w-full px-4 py-3 bg-white border border-[#e5e5e5] rounded text-[#0a0a0a] text-sm font-light placeholder:text-[#94a3b8] focus:outline-none focus:border-[#1e40af] transition-colors"
+          style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+        />
+      </label>
+      <label className="block">
+        <span className="sr-only">Message</span>
+        <textarea
+          required
+          placeholder="Message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          rows={5}
+          className="w-full px-4 py-3 bg-white border border-[#e5e5e5] rounded text-[#0a0a0a] text-sm font-light placeholder:text-[#94a3b8] focus:outline-none focus:border-[#1e40af] transition-colors resize-y min-h-[120px]"
+          style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+        />
+      </label>
+      <button
+        type="submit"
+        className="w-full py-4 bg-[#1e40af] hover:bg-[#1e3a8a] text-white text-sm font-medium rounded transition-colors duration-300"
+        style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+      >
+        Envoyer
+      </button>
+    </form>
   );
 }

@@ -90,6 +90,13 @@ interface ServicePageTemplateProps {
   data: ServicePageData;
 }
 
+// object-position par index pour cadrage "matière" (isolation / silence / sécurité)
+const mobileImagePositions: Record<number, string> = {
+  0: "center",      // Isolation : coupe profilé / triple vitrage
+  1: "center 30%",  // Silence : joint d'étanchéité
+  2: "center 60%",  // Sécurité : quincaillerie / cylindre
+};
+
 function SplitScreenBlock({
   block,
   index,
@@ -99,24 +106,111 @@ function SplitScreenBlock({
 }) {
   const [hasError, setHasError] = useState(false);
   const isImageLeft = block.imagePosition === "left" || (block.imagePosition !== "right" && index % 2 === 0);
+  const mobileObjectPosition = mobileImagePositions[index % 3] ?? "center";
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 h-[70vh] lg:h-[80vh] w-full">
-      {/* Image - Full height, zéro marge */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 min-h-0 w-full lg:h-[80vh] bg-white">
+      {/* Mobile : ordre 1 = Titre, 2 = Image, 3 = Texte. Desktop : image une colonne, titre+texte l'autre */}
+      {/* Titre — mobile first, desktop en haut de la colonne texte */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
-        className={`relative w-full h-full overflow-hidden order-1 ${
-          isImageLeft ? "lg:order-1" : "lg:order-2"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+        className={`order-1 flex items-center px-4 pt-8 pb-4 lg:px-12 lg:pt-16 lg:pb-0 ${
+          isImageLeft ? "lg:col-start-2 lg:row-start-1" : "lg:col-start-1 lg:row-start-1"
         }`}
       >
+        <h3
+          className="text-lg sm:text-2xl lg:text-4xl font-extralight text-[#1e40af] leading-tight uppercase tracking-[0.12em] max-w-xl"
+          style={{
+            fontFamily: "var(--font-sans), system-ui, sans-serif",
+            fontWeight: 200,
+          }}
+        >
+          {block.title}
+        </h3>
+      </motion.div>
+
+      {/* Image — mobile : portrait 4/5, pleine largeur, arrondi 24px, marges verticales */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+        className={`order-2 relative w-full overflow-hidden rounded-[24px] lg:rounded-none my-4 lg:my-0 aspect-[4/5] lg:aspect-auto lg:h-full lg:row-span-2 ${
+          isImageLeft ? "lg:col-start-1 lg:row-start-1" : "lg:col-start-2 lg:row-start-1"
+        }`}
+      >
+        <div className="absolute inset-0">
+          {hasError || !block.image ? (
+            <div className="w-full h-full bg-slate-100 flex items-center justify-center rounded-[24px] lg:rounded-none">
+              <p className="text-sm text-slate-400 font-light px-6 text-center max-w-md">
+                {`En attente de visuel : ${block.serviceName ?? "Châssis One"} - Section ${block.number}`}
+              </p>
+            </div>
+          ) : (
+            <Image
+              src={block.image}
+              alt={block.imageAlt || block.title}
+              fill
+              className="object-cover rounded-[24px] lg:rounded-none"
+              style={{
+                objectPosition: mobileObjectPosition,
+              }}
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              onError={() => setHasError(true)}
+            />
+          )}
+        </div>
+      </motion.div>
+
+      {/* Texte explicatif — mobile après l'image, desktop sous le titre */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
+        className={`order-3 flex items-center px-4 pb-10 lg:px-12 lg:py-16 ${
+          isImageLeft ? "lg:col-start-2 lg:row-start-2" : "lg:col-start-1 lg:row-start-2"
+        }`}
+      >
+        <p
+          className="text-base sm:text-lg lg:text-xl text-[#1f2937] font-light leading-[1.9] max-w-xl"
+          style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+        >
+          {block.text}
+        </p>
+      </motion.div>
+    </div>
+  );
+}
+
+function MobileBenefitCard({
+  block,
+  index,
+}: {
+  block: EditorialBlock;
+  index: number;
+}) {
+  const [hasError, setHasError] = useState(false);
+  const mobileObjectPosition = mobileImagePositions[index % 3] ?? "center";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="w-full"
+    >
+      {/* Image plein format, type magazine d'architecture */}
+      <div className="relative w-full h-[260px] overflow-hidden rounded-lg bg-slate-100">
         {hasError || !block.image ? (
-          <div className="w-full h-full bg-slate-100 flex items-center justify-center">
-            <p className="text-sm text-slate-400 font-light px-8 text-center max-w-md">
-              {`En attente de visuel : ${block.serviceName ?? "Châssis One"} - Section ${block.number}`}
-            </p>
+          <div className="flex h-full w-full items-center justify-center px-4">
+            <span className="text-[11px] text-slate-400 text-center">
+              {block.serviceName ?? "Châssis One"}
+            </span>
           </div>
         ) : (
           <Image
@@ -124,52 +218,32 @@ function SplitScreenBlock({
             alt={block.imageAlt || block.title}
             fill
             className="object-cover"
-            sizes="50vw"
+            style={{ objectPosition: mobileObjectPosition }}
+            sizes="100vw"
             onError={() => setHasError(true)}
           />
         )}
-      </motion.div>
-
-      {/* Texte - Fond blanc, beaucoup d'espace */}
-      <div
-        className={`relative w-full h-full bg-white flex items-center justify-center order-2 ${
-          isImageLeft ? "lg:order-2" : "lg:order-1"
-        }`}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
-          className="max-w-xl mx-auto px-12 lg:px-16 py-16"
-        >
-          <div className="space-y-8">
-            {/* Titre en bleu Contact */}
-            <h3
-              className="text-2xl sm:text-3xl lg:text-4xl font-extralight text-[#1e40af] leading-tight uppercase tracking-[0.12em]"
-              style={{
-                fontFamily: "var(--font-sans), system-ui, sans-serif",
-                fontWeight: 200,
-              }}
-            >
-              {block.title}
-            </h3>
-
-            {/* Texte aéré */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              className="text-base sm:text-lg lg:text-xl text-[#1f2937] font-light leading-[1.9]"
-              style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
-            >
-              {block.text}
-            </motion.p>
-          </div>
-        </motion.div>
       </div>
-    </div>
+
+      {/* Texte sur fond blanc pur, sous l'image */}
+      <div className="pt-4 text-left">
+        <h3
+          className="text-sm font-semibold uppercase tracking-[0.1em] text-slate-900 mb-2"
+          style={{
+            fontFamily: "var(--font-sans), system-ui, sans-serif",
+            fontWeight: 500,
+          }}
+        >
+          {block.title}
+        </h3>
+        <p
+          className="text-sm text-slate-700 leading-[1.6]"
+          style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+        >
+          {block.text}
+        </p>
+      </div>
+    </motion.div>
   );
 }
 
@@ -204,33 +278,43 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
     <>
       <Navbar />
       <main className="overflow-x-hidden">
-        {/* Hero Section Service - Structure identique à la page d'accueil */}
-        <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
-          {/* Background Image with Cinematic Overlay - Structure identique à l'Accueil */}
+        {/* Hero Section Service — mobile: 60vh, cadrage bas, overlay premium */}
+        <section className="relative h-[60vh] md:min-h-screen md:h-auto flex items-center overflow-hidden pt-14 md:pt-20">
           <div className="absolute inset-0 z-0">
             <div
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
               style={{
                 backgroundImage: `url(${heroImageSrc})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center bottom",
               }}
             />
-            {/* Cinematic overlay - Bleu Nuit profond avec texture (identique à l'Accueil) */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a]/60 via-[#1e293b]/50 to-[#0f172a]/70" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(30,64,175,0.15),transparent_60%)]" />
+            <div
+              className="absolute inset-0 hidden bg-cover bg-center bg-no-repeat md:block"
+              style={{
+                backgroundImage: `url(${heroImageSrc})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+            {/* Overlay global pour lisibilité, plus léger sur mobile */}
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.4)] to-[rgba(0,0,0,0.6)]"
+              aria-hidden
+            />
           </div>
 
-          <div className="relative z-10 mx-auto max-w-7xl px-8 lg:px-16 py-32 lg:py-48">
+          <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-8 lg:px-16 py-24 sm:py-32 lg:py-48 w-full flex justify-center md:block">
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="max-w-4xl"
+              className="max-w-4xl w-full text-center md:text-left"
             >
-              {/* Fil d'Ariane - Discret en haut */}
               {data.breadcrumbPath && (
                 <motion.nav
                   variants={itemVariants}
-                  className="mb-8"
+                  className="mb-6 sm:mb-8 flex justify-center md:justify-start"
                   aria-label="Fil d'Ariane"
                 >
                   <ol className="flex items-center gap-1.5 text-xs text-white/70">
@@ -257,29 +341,40 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
                 </motion.nav>
               )}
 
-              {/* Bloc texte Hero - Titre + Description en blanc pur pour un contraste maximal */}
-              <motion.div variants={itemVariants} className="mb-12 max-w-3xl">
-                <h1
-                  className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light mb-4 sm:mb-5 leading-tight tracking-[0.12em] uppercase"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  {data.heroTitle}
-                </h1>
+              {/* Bloc texte Hero — typographie architecturale alignée avec la home */}
+              <motion.div variants={itemVariants} className="mb-10 sm:mb-12 max-w-3xl mx-auto md:mx-0">
+                <div className="inline-block">
+                  <h1
+                    className="text-2xl sm:text-4xl lg:text-6xl xl:text-7xl font-light mb-3 sm:mb-5 leading-[1.2] sm:leading-[1.15] uppercase text-white tracking-[0.12em]"
+                    style={{
+                      color: "#FFFFFF",
+                      letterSpacing: "0.12em",
+                      textShadow: "0px 2px 10px rgba(0,0,0,0.3)",
+                      fontFamily:
+                        "var(--font-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Inter', 'Montserrat', sans-serif)",
+                    }}
+                  >
+                    {data.heroTitle}
+                  </h1>
+                </div>
                 <p
-                  className="text-base sm:text-lg lg:text-2xl leading-relaxed font-light"
-                  style={{ color: "#FFFFFF" }}
+                  className="mt-4 text-xs sm:text-base lg:text-xl leading-relaxed font-light text-white/80"
+                  style={{
+                    fontFamily:
+                      "var(--font-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Inter', 'Montserrat', sans-serif)",
+                  }}
                 >
                   {data.heroSubtitle}
                 </p>
               </motion.div>
 
-              {/* CTAs - Identique à l'Accueil */}
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 mb-16">
-                <Link href="/devis">
+              {/* CTAs — centrés sur mobile */}
+              <motion.div variants={itemVariants} className="flex flex-col md:flex-row gap-4 mb-16 items-center md:items-start">
+                <Link href="/devis" className="w-full sm:w-auto max-w-sm md:max-w-none">
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1e40af] to-[#1e3a8a] text-white font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 border border-white text-white text-[10px] tracking-[0.2em] uppercase rounded-full bg-transparent backdrop-blur-sm shadow-none hover:shadow-none transition-all md:gap-3 md:px-8 md:py-4 md:bg-gradient-to-r md:from-[#1e40af] md:to-[#1e3a8a] md:border-transparent md:text-sm md:tracking-normal md:rounded-lg md:shadow-xl md:hover:shadow-2xl"
                   >
                     DEMANDER UN DEVIS
                     <ArrowRight className="h-5 w-5" />
@@ -290,7 +385,7 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
           </div>
         </section>
 
-        {/* Section "Pourquoi choisir [Produit] ?" - Layout Split-Screen Edge-to-Edge */}
+        {/* Section "Pourquoi choisir [Produit] ?" */}
         {data.editorialBlocks ? (
           <section className="relative w-full bg-white overflow-hidden">
             {/* Titre de section */}
@@ -312,10 +407,19 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
               </h2>
             </motion.div>
 
-            {/* Blocs Split-Screen Edge-to-Edge */}
-            {data.editorialBlocks.map((block, index) => (
-              <SplitScreenBlock key={index} block={block} index={index} />
-            ))}
+            {/* Mobile: cartes pleine largeur, séquence immersive */}
+            <div className="lg:hidden px-4 pb-16 space-y-16">
+              {data.editorialBlocks.map((block, index) => (
+                <MobileBenefitCard key={index} block={block} index={index} />
+              ))}
+            </div>
+
+            {/* Desktop: Split-Screen Edge-to-Edge */}
+            <div className="hidden lg:block">
+              {data.editorialBlocks.map((block, index) => (
+                <SplitScreenBlock key={index} block={block} index={index} />
+              ))}
+            </div>
           </section>
         ) : (
           // Fallback pour l'ancienne structure (rétrocompatibilité)
@@ -606,7 +710,8 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
 
         {/* CTA Final - Split-Screen Luxe Minimaliste */}
         <section className="relative min-h-[500px] lg:min-h-[600px] overflow-hidden">
-          <div className="grid lg:grid-cols-10 h-full min-h-[500px] lg:min-h-[600px]">
+          {/* Version desktop : split-screen image + texte */}
+          <div className="hidden lg:grid lg:grid-cols-10 h-full min-h-[500px] lg:min-h-[600px]">
             {/* GAUCHE (60%) - Visuel artistique en noir et blanc */}
             <motion.div
               className="relative hidden lg:block lg:col-span-6 overflow-hidden"
@@ -634,8 +739,8 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
               </motion.div>
             </motion.div>
 
-            {/* DROITE (40%) - Action sur fond blanc pur */}
-            <div className="lg:col-span-4 bg-white flex items-center justify-center p-6 sm:p-8 md:p-12 lg:p-16">
+            {/* DROITE (40%) - Action sur fond blanc pur (desktop uniquement) */}
+            <div className="lg:col-span-4 bg-white hidden lg:flex items-center justify-center p-6 sm:p-8 md:p-12 lg:p-16">
               <motion.div
                 initial={{ opacity: 0, x: 40 }}
                 whileInView={{ opacity: 1, x: 0 }}
