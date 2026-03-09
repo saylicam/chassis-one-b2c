@@ -2,71 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
-import { Factory, Star, Users, MapPin, ArrowRight } from "lucide-react";
-
-const trustPoints = [
-  {
-    number: "01",
-    title: "Proximité",
-    description: "Vos voisins à Wavre. Service de proximité dans le Brabant Wallon.",
-    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1920&h=1080&fit=crop&auto=format&q=90",
-    size: "square",
-    href: null,
-  },
-  {
-    number: "02",
-    title: "Transparence",
-    description: "Nos poseurs sont nos propres experts. Pas de sous-traitance.",
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&h=1080&fit=crop&auto=format&q=90",
-    size: "large",
-    href: null,
-  },
-  {
-    number: "03",
-    title: "Qualité Sofarau",
-    description: "Technologie Schüco via notre unité de production 100% belge.",
-    // Macro-photo du grain du châssis
-    image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1920&h=1080&fit=crop&auto=format&q=90",
-    size: "square",
-    href: "/solutions",
-  },
-  {
-    number: "04",
-    title: "Fabrication 100% Belge",
-    description: "Savoir-faire d'excellence transmis de génération en génération.",
-    // Plan large de l'atelier Sofarau
-    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1920&h=1080&fit=crop&auto=format&q=90",
-    size: "wide",
-    href: "/notre-histoire",
-  },
-  {
-    number: "05",
-    title: "Garantie de Pose",
-    description: "10 ans sur la pose. Votre tranquillité d'esprit est notre priorité.",
-    // Main d'artisan en action (focus sur le geste)
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&h=1080&fit=crop&auto=format&q=90",
-    size: "square",
-    href: "/realisations",
-  },
-  {
-    number: "06",
-    title: "Qualité Certifiée",
-    description: "Normes européennes respectées. Certifications garanties.",
-    image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1920&h=1080&fit=crop&auto=format&q=90",
-    size: "tall",
-    href: "/devis",
-  },
-  {
-    number: "07",
-    title: "Installation Professionnelle",
-    description: "Artisans qualifiés, soucieux des détails. Chaque projet est une signature.",
-    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1920&h=1080&fit=crop&auto=format&q=90",
-    size: "wide",
-    href: null,
-  },
-];
+import { Factory, Star, Users, MapPin } from "lucide-react";
 
 const testimonials = [
   {
@@ -82,6 +19,41 @@ const testimonials = [
     rating: 5,
   },
 ];
+
+function ExpertiseImage({
+  src,
+  alt,
+  placeholder,
+}: {
+  src: string;
+  alt: string;
+  placeholder: string;
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError || !src) {
+    return (
+      <div className="relative w-full h-full min-h-[260px] sm:min-h-[320px] bg-slate-50 border border-slate-100 rounded-3xl shadow-sm flex items-center justify-center px-8 text-center">
+        <p className="text-sm sm:text-base text-slate-500 font-light leading-relaxed">
+          {placeholder}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full h-full min-h-[260px] sm:min-h-[320px] rounded-3xl overflow-hidden shadow-[0_22px_45px_rgba(15,23,42,0.08)] bg-slate-100">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover object-center"
+        sizes="(max-width: 768px) 100vw, 50vw"
+        onError={() => setHasError(true)}
+      />
+    </div>
+  );
+}
 
 export default function TrustSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -111,161 +83,146 @@ export default function TrustSection() {
           </div>
         </motion.div>
 
-        {/* Section Header - Nos Valeurs & Engagements */}
+        {/* Section Header - L'Expertise en Action */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <h3 
-            className="text-3xl lg:text-4xl font-medium tracking-tight text-[#1F2937] mb-3"
+            className="text-xs sm:text-sm md:text-base font-light tracking-[0.25em] text-[#6B7280] uppercase mb-4"
             style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
           >
-            Nos Valeurs & Engagements
+            L'expertise en action
           </h3>
           <p 
-            className="text-base text-[#1F2937]/60 font-light"
+            className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#111827] leading-tight"
             style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
           >
-            Ce qui nous définit, ce qui nous guide
+            Quand le terrain parle plus fort que les promesses
           </p>
         </motion.div>
 
-        {/* Bento Grid Asymétrique Dynamique avec Effet Focus */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 mb-24 auto-rows-fr">
-          {trustPoints.map((point, index) => {
-            // Déterminer les classes de taille selon le type
-            let colSpan = "";
-            let rowSpan = "";
-            let aspectClass = "aspect-square";
-            
-            if (point.size === "large") {
-              colSpan = "md:col-span-2 lg:col-span-2";
-              rowSpan = "md:row-span-2 lg:row-span-2";
-              aspectClass = "md:aspect-square lg:aspect-square";
-            } else if (point.size === "wide") {
-              colSpan = "md:col-span-2 lg:col-span-2";
-              aspectClass = "md:aspect-[2/1] lg:aspect-[2/1]";
-            } else if (point.size === "tall") {
-              colSpan = "md:col-span-1 lg:col-span-1";
-              rowSpan = "md:row-span-2 lg:row-span-2";
-              aspectClass = "md:aspect-[1/2] lg:aspect-[1/2]";
-            }
-
-            const isHovered = hoveredIndex === index;
-            const isBlurred = hoveredIndex !== null && hoveredIndex !== index;
-
-            const CardContent = (
-              <>
-                {/* Image HD en plein écran avec overlay sombre progressif */}
-                <div className="absolute inset-0">
-                  <Image
-                    src={point.image}
-                    alt={point.title}
-                    fill
-                    className="object-cover transition-all duration-700 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  />
-                  {/* Overlay sombre progressif : plus sombre au hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-black/20 group-hover:from-black/80 group-hover:via-black/60 group-hover:to-black/40 transition-all duration-700" />
-                </div>
-
-                {/* Numéro en bleu marine avec 20% opacité (filigrane) */}
-                <div className="absolute top-4 right-4 lg:top-6 lg:right-6 z-10">
-                  <span 
-                    className="text-4xl lg:text-5xl font-extrabold"
-                    style={{ 
-                      fontFamily: "var(--font-sans), system-ui, sans-serif",
-                      color: "rgba(0, 74, 173, 0.2)",
-                      letterSpacing: "-0.05em",
-                      lineHeight: "1",
-                    }}
-                  >
-                    {point.number}
-                  </span>
-                </div>
-
-                {/* Titre en blanc pur en bas (taille réduite) */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 z-10">
-                  <h4 
-                    className="text-base lg:text-lg font-bold text-white mb-3"
-                    style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
-                  >
-                    {point.title}
-                  </h4>
-                  
-                  {/* Description cachée par défaut, apparaît au hover avec montée */}
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ 
-                      opacity: isHovered ? 1 : 0, 
-                      y: isHovered ? 0 : 20 
-                    }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-sm text-white/90 font-extralight leading-relaxed tracking-wide"
-                    style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 200 }}
-                  >
-                    {point.description}
-                  </motion.p>
-                </div>
-
-                {/* Indicateur "En savoir plus +" au hover */}
-                {point.href && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ 
-                      opacity: isHovered ? 1 : 0, 
-                      y: isHovered ? 0 : 20 
-                    }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-                  >
-                    <div className="flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-sm">
-                      <span 
-                        className="text-xs font-light text-white uppercase tracking-widest"
-                        style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
-                      >
-                        En savoir plus
-                      </span>
-                      <span className="text-white text-lg font-light">+</span>
-                    </div>
-                  </motion.div>
-                )}
-              </>
-            );
-
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20, rotate: -2 }}
-                whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: index * 0.1, 
-                  ease: [0.22, 1, 0.36, 1] 
-                }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                animate={{
-                  opacity: isBlurred ? 0.3 : 1,
-                  filter: isBlurred ? "blur(4px)" : "blur(0px)",
-                }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className={`group relative ${colSpan} ${rowSpan} ${aspectClass} overflow-hidden rounded-sm ${point.href ? "cursor-pointer" : ""}`}
+        {/* Section "L'Expertise en Action" - Layout en Z */}
+        <div className="space-y-16 lg:space-y-24 mb-24">
+          {/* Bloc 1 : Image gauche / Texte droite */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center"
+          >
+            <div className="lg:col-span-5 order-1 lg:order-1">
+              <ExpertiseImage
+                src="/images/services/expertise/fourgons.jpg"
+                alt="Flotte de véhicules d'intervention Châssis One"
+                placeholder="En attente de visuel : Flotte de véhicules d'intervention Châssis One - Section 01"
+              />
+            </div>
+            <div className="lg:col-span-7 order-2 lg:order-2">
+              <p
+                className="text-xs sm:text-sm font-light tracking-[0.25em] text-[#6B7280] uppercase mb-4"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
               >
-                {point.href ? (
-                  <Link href={point.href} className="absolute inset-0">
-                    {CardContent}
-                  </Link>
-                ) : (
-                  CardContent
-                )}
-              </motion.div>
-            );
-          })}
+                Une flotte dédiée
+              </p>
+              <h3
+                className="text-xl sm:text-2xl lg:text-3xl font-light text-[#111827] mb-4 lg:mb-6 leading-snug uppercase tracking-[0.12em]"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+              >
+                UNE FLOTTE DÉDIÉE, UNE RÉACTIVITÉ ABSOLUE
+              </h3>
+              <p
+                className="text-base sm:text-lg text-[#4B5563] font-light leading-relaxed max-w-xl"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+              >
+                Parce que l&apos;excellence commence par une logistique maîtrisée. Notre flotte de véhicules
+                d&apos;intervention nous permet de garantir une ponctualité rigoureuse et un suivi de chantier sans
+                intermédiaire sur tout le Brabant. Nous ne dépendons de personne pour honorer nos rendez-vous.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Bloc 2 : Texte gauche / Image droite */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center"
+          >
+            <div className="lg:col-span-7 order-2 lg:order-1">
+              <p
+                className="text-xs sm:text-sm font-light tracking-[0.25em] text-[#6B7280] uppercase mb-4"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+              >
+                Robot de levage haute sécurité
+              </p>
+              <h3
+                className="text-xl sm:text-2xl lg:text-3xl font-light text-[#111827] mb-4 lg:mb-6 leading-snug uppercase tracking-[0.12em]"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+              >
+                LA PRÉCISION DU GESTE, LA FORCE DU MATÉRIEL
+              </h3>
+              <p
+                className="text-base sm:text-lg text-[#4B5563] font-light leading-relaxed max-w-xl"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+              >
+                Vos projets de grandes dimensions exigent une manipulation d&apos;orfèvre. Grâce à nos robots de
+                levage à ventouses haute sécurité, nous assurons une pose millimétrée de vos vitrages Signature,
+                préservant l&apos;intégrité de vos châssis et la sécurité de votre demeure lors de l&apos;installation.
+              </p>
+            </div>
+            <div className="lg:col-span-5 order-1 lg:order-2">
+              <ExpertiseImage
+                src="/images/services/expertise/robot-levage.jpg"
+                alt="Robot de levage à ventouses en action sur chantier"
+                placeholder="En attente de visuel : Robot de levage à ventouses - Section 02"
+              />
+            </div>
+          </motion.div>
+
+          {/* Bloc 3 : Image gauche / Texte droite */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center"
+          >
+            <div className="lg:col-span-5 order-1 lg:order-1">
+              <ExpertiseImage
+                src="/images/services/expertise/remorque.jpg"
+                alt="Remorque et matériel spécialisé pour menuiserie haut de gamme"
+                placeholder="En attente de visuel : Remorque et matériel spécialisé - Section 03"
+              />
+            </div>
+            <div className="lg:col-span-7 order-2 lg:order-2">
+              <p
+                className="text-xs sm:text-sm font-light tracking-[0.25em] text-[#6B7280] uppercase mb-4"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+              >
+                Équipement professionnel dédié
+              </p>
+              <h3
+                className="text-xl sm:text-2xl lg:text-3xl font-light text-[#111827] mb-4 lg:mb-6 leading-snug uppercase tracking-[0.12em]"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+              >
+                UN ÉQUIPEMENT À LA MESURE DE VOS AMBITIONS
+              </h3>
+              <p
+                className="text-base sm:text-lg text-[#4B5563] font-light leading-relaxed max-w-xl"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+              >
+                L&apos;artisanat moderne ne s&apos;improvise pas. Des remorques sécurisées aux outils de post-mesurage
+                laser, chaque équipe Châssis One dispose du matériel professionnel spécifique à la menuiserie de luxe.
+                C&apos;est ainsi que nous transformons une simple pose en une installation d&apos;exception.
+              </p>
+            </div>
+          </motion.div>
         </div>
 
         {/* Testimonials */}

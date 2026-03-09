@@ -228,7 +228,7 @@ export default function SolutionPage({
                   size="lg"
                   className="px-12 py-6 rounded-2xl text-lg"
                 >
-                  Demander un Devis Gratuit
+                  Demander un Devis
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </Link>

@@ -4,8 +4,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+
+const LOGO_PATH = "/images/logo-chassis-one.png";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -31,9 +34,19 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="text-lg font-bold text-[#0a0a0a] tracking-tight hover:opacity-80 transition-opacity"
+            className="flex items-center h-10 shrink-0 hover:opacity-90 transition-opacity"
+            aria-label="Châssis One - Retour à l'accueil"
           >
-            Châssis One
+            <span className="relative w-[140px] h-[36px]">
+              <Image
+                src={LOGO_PATH}
+                alt="Châssis One"
+                fill
+                className="object-contain object-left"
+                sizes="140px"
+                priority
+              />
+            </span>
           </Link>
 
           {/* Desktop Navigation - Centré */}
@@ -75,7 +88,7 @@ export default function Navbar() {
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#1e40af] to-[#1e3a8a] text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all"
               >
-                Devis Gratuit
+                CONTACT
                 <ArrowRight className="h-3.5 w-3.5" />
               </motion.button>
             </Link>
@@ -152,7 +165,7 @@ export default function Navbar() {
                       whileTap={{ scale: 0.98 }}
                       className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#1e40af] to-[#1e3a8a] text-white font-medium rounded-lg shadow-sm"
                     >
-                      Devis Gratuit
+                      CONTACT
                       <ArrowRight className="h-4 w-4" />
                     </motion.button>
                   </Link>

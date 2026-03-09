@@ -4,25 +4,11 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Factory, Award, Users } from "lucide-react";
 
-// Placeholder pour les logos - à remplacer par les vrais logos
-// Pour l'instant, on utilise des placeholders. Vous devrez remplacer par les vrais logos SVG ou PNG
+// Logos depuis /public/images/partners/ — format .png ou .svg selon vos fichiers
 const partners = [
-  {
-    name: "Schüco",
-    logo: "https://via.placeholder.com/120x40/94a3b8/ffffff?text=Schüco",
-  },
-  {
-    name: "Sofarau",
-    logo: "https://via.placeholder.com/120x40/94a3b8/ffffff?text=Sofarau",
-  },
-  {
-    name: "CE",
-    logo: "https://via.placeholder.com/60x60/94a3b8/ffffff?text=CE",
-  },
-  {
-    name: "CSTB",
-    logo: "https://via.placeholder.com/120x40/94a3b8/ffffff?text=CSTB",
-  },
+  { name: "Schüco", logo: "/images/partners/logo-schuco.png" },
+  { name: "Roto", logo: "/images/partners/logo-roto.png" },
+  { name: "Sofarau", logo: "/images/partners/logo-sofarau.png" },
 ];
 
 const promises = [
@@ -46,7 +32,7 @@ const promises = [
 export default function TransitionSection() {
   return (
     <>
-      {/* Social Proof - Bandeau de logos */}
+      {/* Partenaires d'excellence — logos monochrome, centrés */}
       <section className="py-12 bg-[#f9fafb] border-b border-gray-100">
         <div className="mx-auto max-w-7xl px-8 lg:px-16">
           <motion.div
@@ -54,32 +40,29 @@ export default function TransitionSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col md:flex-row md:items-center md:justify-between gap-8"
+            className="flex flex-col items-center gap-10"
           >
-            {/* Texte */}
             <p className="text-sm font-light text-[#64748b] tracking-wide">
               Nos partenaires d'excellence
             </p>
 
-            {/* Logos */}
-            <div className="flex items-center gap-8 md:gap-12 flex-wrap">
+            <div className="flex flex-wrap items-center justify-center gap-12 lg:gap-16">
               {partners.map((partner, index) => (
                 <motion.div
                   key={partner.name}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group"
+                  className="flex items-center justify-center"
                 >
-                  <div className="relative h-10 w-auto opacity-40 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0">
+                  <div className="relative h-10 w-32 flex items-center justify-center opacity-60 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0">
                     <Image
                       src={partner.logo}
                       alt={partner.name}
-                      width={120}
+                      width={128}
                       height={40}
-                      className="h-full w-auto object-contain"
-                      unoptimized
+                      className="h-full w-auto max-h-10 object-contain object-center"
                     />
                   </div>
                 </motion.div>

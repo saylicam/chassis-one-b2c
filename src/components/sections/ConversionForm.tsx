@@ -209,7 +209,7 @@ export default function ConversionForm() {
           className="text-center mb-16"
         >
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Diagnostic & Devis Gratuit
+            Diagnostic & Demande de Devis
           </h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto font-light">
             Un parcours simple et visuel pour obtenir votre devis personnalisé

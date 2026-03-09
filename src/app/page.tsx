@@ -7,7 +7,8 @@ import PrestigeStatsSection from "@/components/sections/PrestigeStatsSection";
 import HeritageSection from "@/components/sections/HeritageSection";
 import TrustSection from "@/components/sections/TrustSection";
 import InfiniteMarquee from "@/components/sliders/InfiniteMarquee";
-import ArtDetailSection from "@/components/sections/ArtDetailSection";
+import EcoConceptionSection from "@/components/sections/EcoConceptionSection";
+import ContactLocationSection from "@/components/sections/ContactLocationSection";
 import Footer from "@/components/sections/Footer";
 
 const testimonials = [
@@ -67,8 +68,9 @@ export default function Home() {
         <PrestigeStatsSection />
         <HeritageSection />
         <TrustSection />
-        <ArtDetailSection />
+        <EcoConceptionSection />
         <InfiniteMarquee testimonials={testimonials} speed={60} />
+        <ContactLocationSection />
       </main>
       <Footer />
     </>

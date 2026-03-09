@@ -81,7 +81,7 @@ export default function HeroSection() {
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1e40af] to-[#1e3a8a] text-white font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all"
               >
-                Demander un Devis Gratuit
+                DEMANDER UN DEVIS
                 <ArrowRight className="h-5 w-5" />
               </motion.button>
             </Link>
@@ -91,7 +91,7 @@ export default function HeroSection() {
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-all"
               >
-                Découvrir nos Services
+                NOS SOLUTIONS
               </motion.button>
             </Link>
           </motion.div>

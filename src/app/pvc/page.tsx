@@ -3,10 +3,38 @@
 import ServicePageTemplate from "@/components/templates/ServicePageTemplate";
 import { Thermometer, Shield, Sparkles, DollarSign, Volume2, LockKeyhole, Palette } from "lucide-react";
 
+const pvcServiceData = {
+  title: "Pourquoi choisir le PVC ?",
+  sections: [
+    {
+      id: "01",
+      title: "L'Isolation Absolue",
+      text: "Oubliez le vent et le froid. Nos châssis créent une bulle de sérénité thermique dans votre foyer. Le profilé Schüco Living 82 transforme chaque fenêtre en barrière invisible contre les intempéries. Vous ne sentirez plus jamais ce courant d'air furtif qui glisse sous la porte. Votre maison devient un sanctuaire de chaleur, été comme hiver.",
+      img: "/images/services/pvc/1.jpg",
+      alt: "Châssis PVC haute performance installés sur une façade rénovée",
+    },
+    {
+      id: "02",
+      title: "Le Silence Sans Compromis",
+      text: "Le bruit de la rue disparaît. Avec une isolation acoustique jusqu'à 45 dB, profitez d'un calme absolu dans votre intérieur, même dans les zones les plus bruyantes. Les conversations de la terrasse du voisin, le ronronnement des voitures, les aboiements lointains... Tout s'efface. Votre havre de paix vous attend derrière ces fenêtres.",
+      img: "/images/services/pvc/2.jpg",
+      alt: "Fenêtres PVC offrant une isolation acoustique renforcée",
+    },
+    {
+      id: "03",
+      title: "La Simplicité Élégante",
+      text: "Un simple nettoyage à l'eau savonneuse suffit. Résistance naturelle aux intempéries et aux UV sans traitement particulier. Pas de peinture à refaire, pas de traitement à appliquer. Vos fenêtres restent impeccables année après année, sans effort. Le luxe, c'est aussi la simplicité.",
+      img: "/images/services/pvc/3.jpg",
+      alt: "Détail de finition élégante de châssis PVC",
+    },
+  ],
+};
+
 export default function PVCPage() {
   const data = {
-    heroTitle: "L'Équilibre Parfait du PVC",
-    heroSubtitle: "Isolation exceptionnelle, confort optimal, rapport qualité-prix inégalé. Des fenêtres qui transforment votre quotidien.",
+    heroTitle: "LE CONFORT THERMIQUE, LE DESIGN EN PLUS",
+    heroSubtitle:
+      "Alliez haute performance isolante et esthétique moderne. Nos châssis PVC Signature vous offrent une barrière thermique exceptionnelle pour une maison chaleureuse.",
     serviceCategory: "pvc" as const, // Mapping automatique vers /images/services/hero-pvc.jpg
     breadcrumbPath: [
       { label: "Accueil", href: "/" },
@@ -14,36 +42,16 @@ export default function PVCPage() {
       { label: "Châssis PVC", href: "/pvc" },
     ],
     
-    whyChooseTitle: "Pourquoi choisir le PVC ?",
-    editorialBlocks: [
-      {
-        image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&h=800&fit=crop&auto=format&q=90",
-        imageAlt: "Détail de soudure invisible de châssis PVC",
-        title: "L'Isolation Absolue",
-        titleHighlight: "Absolue",
-        text: "Oubliez le vent et le froid. Nos châssis créent une bulle de sérénité thermique dans votre foyer. Le profilé Schüco Living 82 transforme chaque fenêtre en barrière invisible contre les intempéries. Vous ne sentirez plus jamais ce courant d'air furtif qui glisse sous la porte. Votre maison devient un sanctuaire de chaleur, été comme hiver.",
-        number: "01",
-        imagePosition: "left",
-      },
-      {
-        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&h=800&fit=crop&auto=format&q=90",
-        imageAlt: "Intérieur lumineux avec fenêtres PVC",
-        title: "Le Silence Sans Compromis",
-        titleHighlight: "Silence",
-        text: "Le bruit de la rue disparaît. Avec une isolation acoustique jusqu'à 45 dB, profitez d'un calme absolu dans votre intérieur, même dans les zones les plus bruyantes. Les conversations de la terrasse du voisin, le ronronnement des voitures, les aboiements lointains... Tout s'efface. Votre havre de paix vous attend derrière ces fenêtres.",
-        number: "02",
-        imagePosition: "right",
-      },
-      {
-        image: "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1200&h=800&fit=crop&auto=format&q=90",
-        imageAlt: "Détail de poignée et finition PVC",
-        title: "La Simplicité Élégante",
-        titleHighlight: "Élégante",
-        text: "Un simple nettoyage à l'eau savonneuse suffit. Résistance naturelle aux intempéries et aux UV sans traitement particulier. Pas de peinture à refaire, pas de traitement à appliquer. Vos fenêtres restent impeccables année après année, sans effort. Le luxe, c'est aussi la simplicité.",
-        number: "03",
-        imagePosition: "left",
-      },
-    ],
+    whyChooseTitle: pvcServiceData.title,
+    editorialBlocks: pvcServiceData.sections.map((section, index) => ({
+      image: section.img,
+      imageAlt: section.alt,
+      title: section.title,
+      text: section.text,
+      number: section.id,
+      imagePosition: index % 2 === 0 ? "left" : "right",
+      serviceName: "Fenêtres PVC",
+    })),
 
     excellenceTitle: "L'Excellence Technique au service de votre confort",
     excellenceSubtitle: "Une fenêtre qui change votre regard sur l'extérieur. Chaque détail technique est pensé pour améliorer votre quotidien.",
@@ -70,7 +78,7 @@ export default function PVCPage() {
       },
     ],
     detailSection: {
-      image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&h=600&fit=crop&auto=format&q=90",
+      image: "/images/details/pvc-detail.jpg",
       imageAlt: "Détail de finition et poignée PVC",
       title: "Le sens du détail",
       text: "Chaque élément compte. Nos fenêtres PVC sont conçues avec une attention méticuleuse aux finitions. Les poignées ergonomiques, les joints d'étanchéité invisibles et les cadres parfaitement alignés témoignent de notre savoir-faire artisanal. C'est cette précision qui fait la différence entre une simple fenêtre et une fenêtre Châssis One.",
@@ -78,14 +86,8 @@ export default function PVCPage() {
     },
 
     galleryTitle: "Nos Réalisations PVC",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop&auto=format&q=90",
-      "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&h=600&fit=crop&auto=format&q=90",
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&h=600&fit=crop&auto=format&q=90",
-      "https://images.unsplash.com/photo-1600607688364-9e7b8b5e5e5e?w=800&h=600&fit=crop&auto=format&q=90",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop&auto=format&q=90",
-      "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&h=600&fit=crop&auto=format&q=90",
-    ],
+    galleryImages: [],
+    galleryFilterTag: "pvc",
 
     ctaTitle: "Prêt pour votre transformation ?",
     ctaSubtitle: "Contactez nos experts à Wavre pour un devis personnalisé et gratuit.",

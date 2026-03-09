@@ -91,8 +91,8 @@ export default function NotreHistoirePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
-                De l'usine à votre domicile :
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
+                <span className="text-white">De l'usine à votre domicile :</span>
                 <br />
                 <span className="text-amber-400">l'excellence 100% belge</span>
               </h1>

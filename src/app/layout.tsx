@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Châssis One - Expert en Pose de Châssis et Menuiserie à Wavre",
   description:
-    "Châssis One, expert en pose de châssis PVC et aluminium, portes d'entrée, volets roulants et moustiquaires à Wavre. Fabrication 100% belge, garantie 10 ans. Devis gratuit.",
+    "Châssis One, expert en pose de châssis PVC et aluminium, portes d'entrée, volets roulants et moustiquaires à Wavre. Fabrication 100% belge, garantie 10 ans. Demande de devis.",
   keywords: [
     "châssis Wavre",
     "menuiserie Wavre",

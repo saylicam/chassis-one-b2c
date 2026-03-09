@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { ArrowRight, CheckCircle, Thermometer, Shield, Sparkles, Zap, Lock, Sun, DollarSign, Volume2, LockKeyhole, Palette, Award, Users, Headphones, FileText, ChevronRight, Home } from "lucide-react";
+import { realisationProjects } from "@/data/realisations";
 import Button from "@/components/ui/Button";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
@@ -40,13 +42,14 @@ interface Benefit {
 }
 
 interface EditorialBlock {
-  image: string;
-  imageAlt: string;
+  image?: string;
+  imageAlt?: string;
   title: string;
   titleHighlight?: string; // Partie du titre à mettre en évidence (italique ou gras)
   text: string;
   number: string; // "01", "02", etc.
   imagePosition: "left" | "right";
+  serviceName?: string;
 }
 
 interface KeyBenefit {
@@ -78,6 +81,7 @@ interface ServicePageData {
   detailSection?: DetailSection;
   galleryTitle: string;
   galleryImages: string[];
+  galleryFilterTag?: "pvc" | "alu" | "portes" | "volets";
   ctaTitle: string;
   ctaSubtitle: string;
 }
@@ -86,9 +90,115 @@ interface ServicePageTemplateProps {
   data: ServicePageData;
 }
 
+function SplitScreenBlock({
+  block,
+  index,
+}: {
+  block: EditorialBlock;
+  index: number;
+}) {
+  const [hasError, setHasError] = useState(false);
+  const isImageLeft = block.imagePosition === "left" || (block.imagePosition !== "right" && index % 2 === 0);
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 h-[70vh] lg:h-[80vh] w-full">
+      {/* Image - Full height, zéro marge */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
+        className={`relative w-full h-full overflow-hidden order-1 ${
+          isImageLeft ? "lg:order-1" : "lg:order-2"
+        }`}
+      >
+        {hasError || !block.image ? (
+          <div className="w-full h-full bg-slate-100 flex items-center justify-center">
+            <p className="text-sm text-slate-400 font-light px-8 text-center max-w-md">
+              {`En attente de visuel : ${block.serviceName ?? "Châssis One"} - Section ${block.number}`}
+            </p>
+          </div>
+        ) : (
+          <Image
+            src={block.image}
+            alt={block.imageAlt || block.title}
+            fill
+            className="object-cover"
+            sizes="50vw"
+            onError={() => setHasError(true)}
+          />
+        )}
+      </motion.div>
+
+      {/* Texte - Fond blanc, beaucoup d'espace */}
+      <div
+        className={`relative w-full h-full bg-white flex items-center justify-center order-2 ${
+          isImageLeft ? "lg:order-2" : "lg:order-1"
+        }`}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+          className="max-w-xl mx-auto px-12 lg:px-16 py-16"
+        >
+          <div className="space-y-8">
+            {/* Titre en bleu Contact */}
+            <h3
+              className="text-2xl sm:text-3xl lg:text-4xl font-extralight text-[#1e40af] leading-tight uppercase tracking-[0.12em]"
+              style={{
+                fontFamily: "var(--font-sans), system-ui, sans-serif",
+                fontWeight: 200,
+              }}
+            >
+              {block.title}
+            </h3>
+
+            {/* Texte aéré */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              className="text-base sm:text-lg lg:text-xl text-[#1f2937] font-light leading-[1.9]"
+              style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+            >
+              {block.text}
+            </motion.p>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
 export default function ServicePageTemplate({ data }: ServicePageTemplateProps) {
   // Déterminer l'image Hero : priorité à heroImage explicite, sinon mapping automatique
   const heroImageSrc = data.heroImage || (data.serviceCategory ? getHeroImage(data.serviceCategory) : '/images/services/hero-default.jpg');
+  
+  // Image macro "Excellence Technique" : /public/images/details/{service}-excellence.jpg
+  const getMacroImage = () => {
+    switch (data.serviceCategory) {
+      case 'pvc':
+        return "/images/details/pvc-excellence.jpg";
+      case 'alu':
+        return "/images/details/alu-excellence.jpg";
+      case 'portes':
+        return "/images/details/portes-excellence.jpg";
+      case 'volets':
+        return "/images/details/volets-excellence.jpg";
+      default:
+        return "https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1200&h=800&fit=crop&auto=format&q=95";
+    }
+  };
+
+  const galleryImages =
+    data.galleryFilterTag && data.galleryFilterTag !== "volets"
+      ? realisationProjects
+          .filter((project) => project.tag === data.galleryFilterTag)
+          .map((project) => project.image)
+      : data.galleryImages;
   
   return (
     <>
@@ -147,24 +257,19 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
                 </motion.nav>
               )}
 
-              {/* Main Title - Texte spécifique au service */}
-              <motion.div variants={itemVariants} className="mb-8">
-                <h1 className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black text-white mb-6 leading-[0.95] tracking-tight">
-                  VOTRE MAISON LUMINEUSE.
-                  <br />
-                  <span className="relative inline-block">
-                    <span className="absolute inset-0 text-transparent" style={{ WebkitTextStroke: "2px white" }}>
-                      VOTRE VIE PRIVÉE PRÉSERVÉE.
-                    </span>
-                    <span className="relative text-white">VOTRE VIE PRIVÉE PRÉSERVÉE.</span>
-                  </span>
+              {/* Bloc texte Hero - Titre + Description en blanc pur pour un contraste maximal */}
+              <motion.div variants={itemVariants} className="mb-12 max-w-3xl">
+                <h1
+                  className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light mb-4 sm:mb-5 leading-tight tracking-[0.12em] uppercase"
+                  style={{ color: "#FFFFFF" }}
+                >
+                  {data.heroTitle}
                 </h1>
-              </motion.div>
-
-              {/* Description - Texte spécifique au service */}
-              <motion.div variants={itemVariants} className="mb-12">
-                <p className="text-xl lg:text-2xl text-white/90 max-w-2xl leading-relaxed font-light">
-                  Découvrez nos fenêtres haute performance : clarté, isolation thermique et acoustique pour un confort ultime.
+                <p
+                  className="text-base sm:text-lg lg:text-2xl leading-relaxed font-light"
+                  style={{ color: "#FFFFFF" }}
+                >
+                  {data.heroSubtitle}
                 </p>
               </motion.div>
 
@@ -176,7 +281,7 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
                     whileTap={{ scale: 0.98 }}
                     className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1e40af] to-[#1e3a8a] text-white font-semibold rounded-lg shadow-xl hover:shadow-2xl transition-all"
                   >
-                    Demander un Devis Gratuit
+                    DEMANDER UN DEVIS
                     <ArrowRight className="h-5 w-5" />
                   </motion.button>
                 </Link>
@@ -185,118 +290,32 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
           </div>
         </section>
 
-        {/* Section "Pourquoi choisir [Produit] ?" - Design Éditorial Asymétrique */}
+        {/* Section "Pourquoi choisir [Produit] ?" - Layout Split-Screen Edge-to-Edge */}
         {data.editorialBlocks ? (
-          <section className="py-12 sm:py-16 md:py-20 lg:py-32 bg-[#fafafa] overflow-x-hidden">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="text-center mb-12 sm:mb-16 md:mb-20"
+          <section className="relative w-full bg-white overflow-hidden">
+            {/* Titre de section */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+              className="py-16 lg:py-24 px-8 lg:px-16 text-center"
+            >
+              <h2
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight text-[#1e40af] mb-4 leading-tight uppercase tracking-[0.12em]"
+                style={{
+                  fontFamily: "var(--font-sans), system-ui, sans-serif",
+                  fontWeight: 200,
+                }}
               >
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-slate-900 mb-4 sm:mb-6 leading-tight px-2">
-                  {data.whyChooseTitle}
-                </h2>
-              </motion.div>
+                {data.whyChooseTitle}
+              </h2>
+            </motion.div>
 
-              {/* Blocs éditoriaux alternés */}
-              <div className="space-y-16 sm:space-y-20 md:space-y-24 lg:space-y-32">
-                {data.editorialBlocks.map((block, index) => {
-                  const isEven = index % 2 === 0;
-                  const imageFirst = block.imagePosition === "left" || (block.imagePosition !== "right" && isEven);
-                  
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 60 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-100px" }}
-                      transition={{ duration: 0.8, delay: index * 0.2, ease: [0.22, 1, 0.36, 1] }}
-                      className={`grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 items-center ${
-                        !imageFirst ? "lg:grid-flow-dense" : ""
-                      }`}
-                    >
-                      {/* Image avec effet parallaxe - TOUJOURS en premier sur mobile */}
-                      <motion.div
-                        initial={{ opacity: 0, x: imageFirst ? -60 : 60 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                        className={`relative w-full h-[280px] sm:h-[320px] md:h-[380px] lg:h-[500px] overflow-hidden rounded-2xl sm:rounded-3xl lg:rounded-[2.5rem] order-1 ${
-                          !imageFirst ? "lg:col-start-2 lg:order-2" : "lg:order-1"
-                        }`}
-                        style={{
-                          clipPath: "polygon(0 0, 100% 0, 100% 95%, 0 100%)"
-                        }}
-                      >
-                        <motion.div
-                          initial={{ scale: 1.15 }}
-                          whileInView={{ scale: 1 }}
-                          viewport={{ once: false }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
-                          className="absolute inset-0"
-                        >
-                          <Image
-                            src={block.image}
-                            alt={block.imageAlt}
-                            fill
-                            className="object-cover object-center"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 50vw"
-                          />
-                        </motion.div>
-                      </motion.div>
-
-                      {/* Texte avec numéro en fond - TOUJOURS en second sur mobile */}
-                      <motion.div
-                        initial={{ opacity: 0, x: imageFirst ? 60 : -60 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                        className={`relative order-2 px-2 sm:px-4 md:px-0 ${!imageFirst ? "lg:col-start-1 lg:order-1" : "lg:order-2"}`}
-                      >
-                        {/* Numéro discret en fond - Caché sur mobile si trop encombrant */}
-                        <div className="hidden md:block absolute -top-8 -left-4 lg:-top-12 lg:-left-8 text-[80px] md:text-[120px] lg:text-[180px] font-black text-slate-100 leading-none select-none z-0">
-                          {block.number}
-                        </div>
-
-                        {/* Contenu */}
-                        <div className="relative z-10 space-y-4 sm:space-y-5 md:space-y-6">
-                          {/* Ligne verticale fine - Cachée sur mobile */}
-                          <div className="hidden sm:block h-8 sm:h-10 md:h-12 w-[0.5px] bg-[#004aad]/30" />
-                          
-                          {/* Titre avec typographie signature */}
-                          <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-slate-900 leading-tight">
-                            {block.title.split(" ").map((word, wordIndex) => {
-                              const isHighlight = block.titleHighlight && word.toLowerCase().includes(block.titleHighlight.toLowerCase());
-                              return (
-                                <span key={wordIndex}>
-                                  {isHighlight ? (
-                                    <span className="font-bold italic text-[#004aad]">{word}</span>
-                                  ) : (
-                                    <span>{word}</span>
-                                  )}
-                                  {wordIndex < block.title.split(" ").length - 1 && " "}
-                                </span>
-                              );
-                            })}
-                          </h3>
-
-                          {/* Ligne horizontale fine */}
-                          <div className="w-12 sm:w-16 h-[0.5px] bg-slate-300" />
-
-                          {/* Texte sensoriel */}
-                          <p className="text-base sm:text-lg md:text-lg lg:text-xl text-slate-700 font-light leading-relaxed max-w-xl">
-                            {block.text}
-                          </p>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
+            {/* Blocs Split-Screen Edge-to-Edge */}
+            {data.editorialBlocks.map((block, index) => (
+              <SplitScreenBlock key={index} block={block} index={index} />
+            ))}
           </section>
         ) : (
           // Fallback pour l'ancienne structure (rétrocompatibilité)
@@ -348,49 +367,83 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
         {/* Séparateur élégant */}
         <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
-        {/* Section "L'Excellence Technique au service de votre confort" - Bénéfices Clés */}
-        <section className="py-16 lg:py-24 bg-[#fafafa]">
+        {/* Section "L'Excellence Technique au service de votre confort" - Bento Grid Architectural */}
+        <section className="py-16 lg:py-24 bg-[#F8F9FA]">
           <div className="mx-auto max-w-7xl px-8 sm:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-center mb-12"
+              className="text-center mb-12 lg:mb-16"
             >
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 leading-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 leading-tight tracking-tight">
                 {data.excellenceTitle}
               </h2>
-              <p className="text-lg text-slate-600 font-normal leading-relaxed max-w-3xl mx-auto">
+              <p className="text-lg text-slate-600 font-light leading-relaxed max-w-3xl mx-auto">
                 {data.excellenceSubtitle}
               </p>
             </motion.div>
 
-            {/* Grille de 4 blocs visuels larges */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-              {data.keyBenefits.map((benefit, index) => {
-                const IconComponent = benefit.icon;
-                return (
+            {/* Bento Grid Asymétrique : Image macro (2/3) + Arguments techniques (1/3) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+              {/* Bloc principal (Gauche - 2/3) : Image macro de détail */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="lg:col-span-2 relative h-[400px] lg:h-[600px] rounded-2xl overflow-hidden"
+              >
+                <Image
+                  src={getMacroImage()}
+                  alt="Détail macro technique"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 66vw"
+                  quality={95}
+                />
+                {/* Overlay subtil pour lisibilité */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+              </motion.div>
+
+              {/* Blocs secondaires (Droite - 1/3) : Arguments techniques empilés */}
+              <div className="lg:col-span-1 space-y-6 lg:space-y-8">
+                {data.keyBenefits.map((benefit, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                    className="bg-white border border-[#004aad]/20 rounded-xl p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-300"
+                    transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                    className="relative backdrop-blur-md bg-white/60 border border-white/20 rounded-xl p-6 lg:p-8 shadow-sm hover:shadow-lg transition-all duration-300"
                   >
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-[#004aad]/10 mb-6 border border-[#004aad]/20">
-                      <IconComponent className="h-8 w-8 text-[#004aad]" />
+                    {/* Numéro stylisé (remplace l'icône) */}
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="flex-shrink-0">
+                        <span 
+                          className="text-4xl lg:text-5xl font-bold text-[#004aad]/20 leading-none tracking-tight"
+                          style={{ fontFamily: "Georgia, serif" }}
+                        >
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                      </div>
+                      {/* Ligne de séparation dorée/marine */}
+                      <div className="flex-1 pt-3">
+                        <div className="h-[1px] w-5 bg-[#004aad]/40" />
+                      </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-slate-900 mb-4 leading-tight">
+
+                    {/* Titre et description */}
+                    <h3 className="text-xl lg:text-2xl font-bold text-slate-900 mb-3 leading-tight tracking-tight">
                       {benefit.title}
                     </h3>
-                    <p className="text-base text-slate-700 font-normal leading-relaxed">
+                    <p className="text-sm lg:text-base text-gray-500 font-light leading-relaxed">
                       {benefit.description}
                     </p>
                   </motion.div>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -529,7 +582,7 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data.galleryImages.map((image, index) => (
+              {galleryImages.map((image, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -570,7 +623,7 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
                 transition={{ duration: 1.5, ease: "easeOut" }}
               >
                 <Image
-                  src={data.heroImage}
+                  src={heroImageSrc}
                   alt="Détail architectural"
                   fill
                   className="object-cover object-center grayscale brightness-90 contrast-110"
@@ -636,7 +689,7 @@ export default function ServicePageTemplate({ data }: ServicePageTemplateProps) 
           <div className="lg:hidden">
             <div className="relative h-[300px] overflow-hidden">
               <Image
-                src={data.heroImage}
+                src={heroImageSrc}
                 alt="Détail architectural"
                 fill
                 className="object-cover object-center grayscale brightness-90 contrast-110"
