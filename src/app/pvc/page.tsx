@@ -74,7 +74,7 @@ export default function PVCPage() {
       {
         icon: Palette,
         title: "Design Personnalisé",
-        description: "Finitons et couleurs sur mesure pour s'adapter à votre style. Du blanc classique aux teintes anthracite, créez une harmonie parfaite entre votre intérieur et votre extérieur.",
+        description: "Finitions et couleurs sur mesure pour s'adapter à votre style. Du blanc classique aux teintes anthracite, créez une harmonie parfaite entre votre intérieur et votre extérieur.",
       },
     ],
     detailSection: {

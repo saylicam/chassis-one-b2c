@@ -277,13 +277,12 @@ export default function TrustSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto"
         >
           {[
             { label: "Années d'expérience", value: "15+" },
-            { label: "Clients satisfaits", value: "2000+" },
-            { label: "Projets réalisés", value: "5000+" },
-            { label: "Garantie", value: "10 ans" },
+            { label: "Chantiers résidentiels", value: "+1 500" },
+            { label: "Satisfaction client", value: "98%" },
           ].map((stat, index) => (
             <motion.div
               key={index}
@@ -297,6 +296,25 @@ export default function TrustSection() {
               <p className="text-[#64748b] text-sm font-light">{stat.label}</p>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Garanties décennales */}
+        <motion.div
+          id="garanties"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-24 lg:mt-32 max-w-3xl mx-auto text-center"
+        >
+          <h3 className="text-2xl lg:text-3xl font-bold text-[#0a0a0a] mb-4 tracking-tight">
+            Garanties décennales
+          </h3>
+          <p className="text-[#64748b] font-light leading-relaxed text-lg">
+            Chaque pose Châssis One est couverte par une garantie décennale sur l&apos;étanchéité et la solidité.
+            Matériaux certifiés Schüco, pose agréée et suivi post-installation : votre tranquillité d&apos;esprit,
+            notre engagement.
+          </p>
         </motion.div>
       </div>
     </section>

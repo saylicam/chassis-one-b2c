@@ -38,31 +38,27 @@ const timelineEvents = [
   },
 ];
 
-// Team members
+// Équipe — rôles d'experts
 const teamMembers = [
   {
-    name: "Jean Dupont",
-    role: "Poseur Expert",
+    role: "Conseiller Métreur & Rénovation",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&auto=format&q=90",
-    experience: "12 ans d'expérience",
+    description: "Étude sur site et accompagnement personnalisé",
   },
   {
-    name: "Marie Martin",
-    role: "Métreur",
+    role: "Chef d'Équipe Pose Agréé",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&auto=format&q=90",
-    experience: "8 ans d'expérience",
+    description: "Pose certifiée et finitions impeccables",
   },
   {
-    name: "Pierre Dubois",
-    role: "Poseur Expert",
+    role: "Responsable Suivi Client",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&auto=format&q=90",
-    experience: "10 ans d'expérience",
+    description: "Un interlocuteur unique de A à Z",
   },
   {
-    name: "Sophie Lambert",
-    role: "Conseillère Technique",
+    role: "Expert Technique Châssis",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&auto=format&q=90",
-    experience: "6 ans d'expérience",
+    description: "Conseil matériaux et performance énergétique",
   },
 ];
 
@@ -320,18 +316,17 @@ export default function NotreHistoirePage() {
                     <div className="relative aspect-square overflow-hidden">
                       <Image
                         src={member.image}
-                        alt={member.name}
+                        alt={member.role}
                         fill
                         className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
                     </div>
                     <div className="p-6 text-center">
-                      <h3 className="text-xl font-bold text-[#0a0a0a] mb-1">
-                        {member.name}
+                      <h3 className="text-lg font-bold text-[#0a0a0a] mb-2">
+                        {member.role}
                       </h3>
-                      <p className="text-[#64748b] font-light mb-2">{member.role}</p>
-                      <p className="text-sm text-[#94a3b8] font-light">{member.experience}</p>
+                      <p className="text-sm text-[#64748b] font-light">{member.description}</p>
                     </div>
                   </div>
                 </motion.div>

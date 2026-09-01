@@ -7,191 +7,76 @@ import {
   ArrowRight,
   Check,
   Mail,
+  MapPin,
   Phone,
   Send,
   User,
   Thermometer,
   Shield,
   Sun,
+  Volume2,
+  Home,
+  Building2,
+  DoorOpen,
+  PanelTop,
+  Layers,
+  Loader2,
   Sparkles,
-  TreePine,
-  Zap,
-  Bug,
 } from "lucide-react";
 import Button from "@/components/ui/Button";
-import BlueprintDiagram, { BlueprintDiagramType } from "@/components/ui/BlueprintDiagram";
 import { cn } from "@/lib/utils";
 
-type StepId = "material" | "products" | "vitrage" | "finitions" | "accessoires" | "project" | "contact";
+type StepId = "project" | "priorities" | "elements" | "material" | "volume" | "contact";
 
-type MaterialId = "pvc" | "aluminium" | "mixte";
-type ProductId = "fenetres" | "portes" | "coulissants" | "volets";
-type VitrageId = "isolation" | "securite" | "solaire";
-type FinitionId = "graine" | "lisse" | "bois";
-type AccessoireId = "moustiquaire" | "volets-motorises";
 type ProjectId = "renovation" | "neuf";
+type PriorityId = "chaleur" | "silence" | "securite" | "luminosite";
+type ElementId = "fenetres" | "porte-entree" | "baies" | "volets";
+type MaterialId = "pvc" | "aluminium" | "conseil";
+type VolumeId = "1-3" | "4-8" | "maison-complete";
 
 type FormState = {
-  material?: MaterialId;
-  products: ProductId[];
-  vitrage?: VitrageId[];
-  finitions?: FinitionId;
-  accessoires: AccessoireId[];
   project?: ProjectId;
+  priorities: PriorityId[];
+  elements: ElementId[];
+  material?: MaterialId;
+  volume?: VolumeId;
   name: string;
   phone: string;
   email: string;
+  postalCode: string;
   message: string;
 };
 
 const steps: { id: StepId; title: string; subtitle: string }[] = [
   {
-    id: "material",
-    title: "L'Écrin",
-    subtitle: "Quel matériau imaginez-vous pour votre projet ?",
-  },
-  {
-    id: "products",
-    title: "La Configuration",
-    subtitle: "Sélectionnez vos besoins (plusieurs choix possibles).",
-  },
-  {
-    id: "vitrage",
-    title: "Le Vitrage",
-    subtitle: "Choisissez les caractéristiques de votre vitrage.",
-  },
-  {
-    id: "finitions",
-    title: "Les Finitions",
-    subtitle: "Quelle texture souhaitez-vous pour vos châssis ?",
-  },
-  {
-    id: "accessoires",
-    title: "Les Accessoires",
-    subtitle: "Complétez votre configuration avec des options premium.",
-  },
-  {
     id: "project",
-    title: "Le Projet",
-    subtitle: "Rénovation ou nouvelle construction ?",
+    title: "Votre Projet",
+    subtitle: "Quel type de projet envisagez-vous ?",
+  },
+  {
+    id: "priorities",
+    title: "Vos Priorités de Confort",
+    subtitle: "Sélectionnez ce qui compte le plus pour vous (plusieurs choix possibles).",
+  },
+  {
+    id: "elements",
+    title: "Éléments Concernés",
+    subtitle: "Quels éléments souhaitez-vous remplacer ou installer ?",
+  },
+  {
+    id: "material",
+    title: "Choix du Matériau",
+    subtitle: "Quel matériau vous correspond le mieux ?",
+  },
+  {
+    id: "volume",
+    title: "Estimation du Volume",
+    subtitle: "Combien de châssis sont concernés par votre projet ?",
   },
   {
     id: "contact",
-    title: "La Signature",
-    subtitle: "Vos coordonnées — une finition aussi soignée que nos poses.",
-  },
-];
-
-const materialCards: {
-  id: MaterialId;
-  label: string;
-  description: string;
-  texture: string;
-}[] = [
-  {
-    id: "pvc",
-    label: "PVC",
-    description: "Isolation premium, entretien minimal, équilibre parfait.",
-    texture:
-      "https://images.unsplash.com/photo-1526498460520-4c246339dccb?w=1200&h=900&fit=crop&auto=format&q=80",
-  },
-  {
-    id: "aluminium",
-    label: "Aluminium",
-    description: "Lignes architecturales, finesse et résistance.",
-    texture:
-      "https://images.unsplash.com/photo-1533639326831-9c8c62fce5a5?w=1200&h=900&fit=crop&auto=format&q=80",
-  },
-  {
-    id: "mixte",
-    label: "Mixte",
-    description: "Le meilleur des deux mondes — performance et design.",
-    texture:
-      "https://images.unsplash.com/photo-1523699199341-2d30cfe39a88?w=1200&h=900&fit=crop&auto=format&q=80",
-  },
-];
-
-const productCards: {
-  id: ProductId;
-  label: string;
-  description: string;
-  blueprint: BlueprintDiagramType;
-}[] = [
-  { id: "fenetres", label: "Fenêtres", description: "Ouvrant, oscillo-battant, fixe.", blueprint: "fenetres" },
-  { id: "portes", label: "Portes", description: "Entrée, porte-fenêtre, sécurité.", blueprint: "portes" },
-  { id: "coulissants", label: "Coulissants", description: "Grands apports de lumière.", blueprint: "coulissants" },
-  { id: "volets", label: "Volets", description: "Confort, protection, domotique.", blueprint: "volets" },
-];
-
-const vitrageCards: {
-  id: VitrageId;
-  label: string;
-  description: string;
-  icon: ComponentType<{ className?: string }>;
-}[] = [
-  {
-    id: "isolation",
-    label: "Isolation Thermique",
-    description: "Double ou triple vitrage pour une performance énergétique optimale.",
-    icon: Thermometer,
-  },
-  {
-    id: "securite",
-    label: "Sécurité Renforcée",
-    description: "Vitrage feuilleté et résistant aux effractions pour votre tranquillité.",
-    icon: Shield,
-  },
-  {
-    id: "solaire",
-    label: "Contrôle Solaire",
-    description: "Réduction des apports solaires pour un confort été comme hiver.",
-    icon: Sun,
-  },
-];
-
-const finitionCards: {
-  id: FinitionId;
-  label: string;
-  description: string;
-  texture: string;
-}[] = [
-  {
-    id: "graine",
-    label: "Grainé",
-    description: "Texture fine et discrète, élégance sobre.",
-    texture: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=600&fit=crop&auto=format&q=80",
-  },
-  {
-    id: "lisse",
-    label: "Lisse",
-    description: "Surface parfaitement lisse, esthétique moderne.",
-    texture: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&h=600&fit=crop&auto=format&q=80",
-  },
-  {
-    id: "bois",
-    label: "Aspect Bois",
-    description: "Rendu authentique du bois, chaleur naturelle.",
-    texture: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop&auto=format&q=80",
-  },
-];
-
-const accessoireCards: {
-  id: AccessoireId;
-  label: string;
-  description: string;
-  icon: ComponentType<{ className?: string }>;
-}[] = [
-  {
-    id: "moustiquaire",
-    label: "Moustiquaires Intégrées",
-    description: "Protection discrète contre les insectes, ventilation préservée.",
-    icon: Bug,
-  },
-  {
-    id: "volets-motorises",
-    label: "Volets Motorisés",
-    description: "Domotique intégrée, contrôle à distance, confort absolu.",
-    icon: Zap,
+    title: "Vos Coordonnées & Prise de Rendez-vous",
+    subtitle: "Laissez-nous vos coordonnées pour organiser votre métré gratuit.",
   },
 ];
 
@@ -201,9 +86,129 @@ const projectCards: {
   description: string;
   icon: ComponentType<{ className?: string }>;
 }[] = [
-  { id: "renovation", label: "Rénovation", description: "Remplacement, performance énergétique, finitions.", icon: ArrowRight },
-  { id: "neuf", label: "Nouvelle construction", description: "Projet complet, optimisation dès la conception.", icon: Check },
+  {
+    id: "renovation",
+    label: "Rénovation / Remplacement",
+    description: "Amélioration thermique et remplacement d'anciens châssis.",
+    icon: Home,
+  },
+  {
+    id: "neuf",
+    label: "Nouvelle Construction / Extension",
+    description: "Projet neuf ou extension avec optimisation dès la conception.",
+    icon: Building2,
+  },
 ];
+
+const priorityCards: {
+  id: PriorityId;
+  label: string;
+  description: string;
+  icon: ComponentType<{ className?: string }>;
+}[] = [
+  {
+    id: "chaleur",
+    label: "Chaleur & Économies d'énergie",
+    description: "Isolation thermique maximale, primes régionales.",
+    icon: Thermometer,
+  },
+  {
+    id: "silence",
+    label: "Silence & Calme",
+    description: "Isolation acoustique anti-bruit de rue.",
+    icon: Volume2,
+  },
+  {
+    id: "securite",
+    label: "Sécurité Anti-effraction",
+    description: "Fermetures multipoints et vitrage renforcé.",
+    icon: Shield,
+  },
+  {
+    id: "luminosite",
+    label: "Luminosité & Confort solaire",
+    description: "Apport de lumière sans surchauffe en été.",
+    icon: Sun,
+  },
+];
+
+const elementCards: {
+  id: ElementId;
+  label: string;
+  description: string;
+  icon: ComponentType<{ className?: string }>;
+}[] = [
+  {
+    id: "fenetres",
+    label: "Fenêtres & Portes-fenêtres",
+    description: "Ouvrants, oscillo-battants, fixes.",
+    icon: PanelTop,
+  },
+  {
+    id: "porte-entree",
+    label: "Porte d'Entrée",
+    description: "Sécurité, isolation et design d'accueil.",
+    icon: DoorOpen,
+  },
+  {
+    id: "baies",
+    label: "Baies Coulissantes",
+    description: "Grands apports de lumière, ouvertures généreuses.",
+    icon: Layers,
+  },
+  {
+    id: "volets",
+    label: "Volets & Protections",
+    description: "Confort, protection solaire et sécurité.",
+    icon: Shield,
+  },
+];
+
+const materialCards: {
+  id: MaterialId;
+  label: string;
+  description: string;
+  icon: ComponentType<{ className?: string }>;
+}[] = [
+  {
+    id: "pvc",
+    label: "PVC Haute Isolation",
+    description: "Idéal rénovation, entretien zéro, rapport qualité/prix optimal.",
+    icon: Thermometer,
+  },
+  {
+    id: "aluminium",
+    label: "Aluminium Architectural",
+    description: "Profilés fins et rigidité pour grandes ouvertures.",
+    icon: Layers,
+  },
+  {
+    id: "conseil",
+    label: "Conseillez-moi lors du métré gratuit",
+    description: "Laissez le choix à l'expert à domicile.",
+    icon: Sparkles,
+  },
+];
+
+const volumeCards: {
+  id: VolumeId;
+  label: string;
+  description: string;
+}[] = [
+  { id: "1-3", label: "1 à 3 châssis", description: "Quelques ouvertures à remplacer." },
+  { id: "4-8", label: "4 à 8 châssis", description: "Projet intermédiaire, plusieurs pièces." },
+  { id: "maison-complete", label: "Maison complète (+8 châssis)", description: "Rénovation ou construction globale." },
+];
+
+const initialState: FormState = {
+  priorities: [],
+  elements: [],
+  name: "",
+  phone: "",
+  email: "",
+  postalCode: "",
+  message: "",
+};
 
 function clampProgress(value: number) {
   return Math.max(0, Math.min(100, value));
@@ -226,6 +231,7 @@ function LineField({
   error,
   onChange,
   onBlur,
+  type = "text",
 }: {
   label: string;
   icon: ReactNode;
@@ -234,6 +240,7 @@ function LineField({
   error?: string;
   onChange: (v: string) => void;
   onBlur?: () => void;
+  type?: string;
 }) {
   return (
     <div>
@@ -241,7 +248,7 @@ function LineField({
       <div className="relative flex items-center gap-3 pb-3 border-b border-[#e2e8f0] focus-within:border-[#1e40af] transition-colors">
         <div className="text-[#94a3b8]">{icon}</div>
         <input
-          type="text"
+          type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
@@ -254,79 +261,85 @@ function LineField({
   );
 }
 
+function SummaryItem({ label, value, icon: Icon }: { label: string; value: string; icon: ComponentType<{ className?: string }> }) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="w-5 h-5 rounded border border-[#e2e8f0] bg-white flex items-center justify-center shrink-0 mt-0.5">
+        <Icon className="h-3 w-3 text-[#1e40af]" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-[#94a3b8] font-light mb-1">{label}</p>
+        <p className="text-sm font-medium text-[#0a0a0a]">{value}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function DevisConfigurator() {
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const [selectedBlueprint, setSelectedBlueprint] = useState<string | null>(null);
-
-  const [state, setState] = useState<FormState>({
-    products: [],
-    vitrage: [],
-    accessoires: [],
-    name: "",
-    phone: "",
-    email: "",
-    message: "",
-  });
+  const [state, setState] = useState<FormState>(initialState);
 
   const step = steps[stepIndex];
   const progress = clampProgress(((stepIndex + 1) / steps.length) * 100);
 
   const summary = useMemo(() => {
-    const materialLabel = state.material
-      ? materialCards.find((m) => m.id === state.material)?.label
-      : undefined;
-
-    const productLabels = state.products
-      .map((p) => productCards.find((x) => x.id === p)?.label)
-      .filter(Boolean) as string[];
-
-    const vitrageLabels = state.vitrage
-      ?.map((v) => vitrageCards.find((x) => x.id === v)?.label)
-      .filter(Boolean) as string[];
-
-    const finitionLabel = state.finitions
-      ? finitionCards.find((f) => f.id === state.finitions)?.label
-      : undefined;
-
-    const accessoireLabels = state.accessoires
-      .map((a) => accessoireCards.find((x) => x.id === a)?.label)
-      .filter(Boolean) as string[];
-
     const projectLabel = state.project
       ? projectCards.find((p) => p.id === state.project)?.label
       : undefined;
 
-    return {
-      materialLabel,
-      productLabels,
-      vitrageLabels,
-      finitionLabel,
-      accessoireLabels,
-      projectLabel,
-    };
+    const priorityLabels = state.priorities
+      .map((p) => priorityCards.find((x) => x.id === p)?.label)
+      .filter(Boolean) as string[];
+
+    const elementLabels = state.elements
+      .map((e) => elementCards.find((x) => x.id === e)?.label)
+      .filter(Boolean) as string[];
+
+    const materialLabel = state.material
+      ? materialCards.find((m) => m.id === state.material)?.label
+      : undefined;
+
+    const volumeLabel = state.volume
+      ? volumeCards.find((v) => v.id === state.volume)?.label
+      : undefined;
+
+    return { projectLabel, priorityLabels, elementLabels, materialLabel, volumeLabel };
   }, [state]);
+
+  const hasSummary =
+    !!summary.projectLabel ||
+    summary.priorityLabels.length > 0 ||
+    summary.elementLabels.length > 0 ||
+    !!summary.materialLabel ||
+    !!summary.volumeLabel;
 
   const errors = useMemo(() => {
     const e: Record<string, string> = {};
     if (touched.name && !state.name.trim()) e.name = "Nom requis";
     if (touched.phone && !isValidPhone(state.phone)) e.phone = "Téléphone invalide";
     if (touched.email && !isValidEmail(state.email)) e.email = "Email invalide";
+    if (touched.postalCode && !state.postalCode.trim()) e.postalCode = "Code postal requis";
     return e;
   }, [state, touched]);
 
   const canProceed = useMemo(() => {
-    if (step.id === "material") return !!state.material;
-    if (step.id === "products") return state.products.length > 0;
-    if (step.id === "vitrage") return (state.vitrage?.length ?? 0) > 0;
-    if (step.id === "finitions") return !!state.finitions;
-    if (step.id === "accessoires") return true; // Optionnel
     if (step.id === "project") return !!state.project;
+    if (step.id === "priorities") return state.priorities.length > 0;
+    if (step.id === "elements") return state.elements.length > 0;
+    if (step.id === "material") return !!state.material;
+    if (step.id === "volume") return !!state.volume;
     if (step.id === "contact") {
-      return !!(state.name.trim() && isValidPhone(state.phone) && isValidEmail(state.email));
+      return !!(
+        state.name.trim() &&
+        isValidPhone(state.phone) &&
+        isValidEmail(state.email) &&
+        state.postalCode.trim()
+      );
     }
     return false;
   }, [step.id, state]);
@@ -345,28 +358,53 @@ export default function DevisConfigurator() {
     }
   };
 
+  const toggleMulti = <T extends string>(field: "priorities" | "elements", id: T) => {
+    setState((s) => {
+      const current = s[field] as T[];
+      const selected = current.includes(id);
+      return {
+        ...s,
+        [field]: selected ? current.filter((x) => x !== id) : [...current, id],
+      };
+    });
+  };
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!canProceed) return;
+    if (!canProceed || submitting) return;
 
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-    setSubmitting(false);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setStepIndex(0);
-      setState({
-        products: [],
-        vitrage: [],
-        accessoires: [],
-        name: "",
-        phone: "",
-        email: "",
-        message: "",
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/devis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          project: state.project,
+          priorities: state.priorities,
+          elements: state.elements,
+          material: state.material,
+          volume: state.volume,
+          name: state.name.trim(),
+          phone: state.phone.trim(),
+          email: state.email.trim(),
+          postalCode: state.postalCode.trim(),
+          message: state.message.trim() || undefined,
+        }),
       });
-      setTouched({});
-    }, 5000);
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error ?? "Erreur lors de l'envoi");
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Une erreur est survenue");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const variants = {
@@ -375,9 +413,71 @@ export default function DevisConfigurator() {
     exit: (dir: 1 | -1) => ({ x: dir > 0 ? -20 : 20, opacity: 0 }),
   };
 
+  const renderSelectionCard = ({
+    cardKey,
+    selected,
+    onClick,
+    children,
+    className,
+  }: {
+    cardKey: string;
+    selected: boolean;
+    onClick: () => void;
+    children: ReactNode;
+    className?: string;
+  }) => (
+    <motion.button
+      key={cardKey}
+      type="button"
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className={cn(
+        "relative text-left rounded-2xl border transition-all duration-300 bg-white",
+        selected
+          ? "border-[#1e40af] shadow-ultra-soft"
+          : "border-[#e2e8f0] hover:border-[#cbd5e1] hover:shadow-ultra-soft",
+        className
+      )}
+    >
+      {children}
+      {selected && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="absolute top-4 right-4 inline-flex items-center gap-1 text-sm font-medium text-[#1e40af]"
+        >
+          <Check className="h-4 w-4" />
+        </motion.div>
+      )}
+    </motion.button>
+  );
+
+  if (submitted) {
+    return (
+      <section className="min-h-[calc(100vh-80px)] bg-white flex items-center justify-center px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-xl text-center"
+        >
+          <div className="w-16 h-16 rounded-full bg-[#1e40af]/10 flex items-center justify-center mx-auto mb-8">
+            <Check className="h-8 w-8 text-[#1e40af]" />
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0a0a0a] mb-4">
+            Votre demande de devis a bien été transmise !
+          </h1>
+          <p className="text-lg text-[#64748b] font-light leading-relaxed">
+            Un conseiller Châssis One vous contactera sous 24 à 48h pour fixer votre métré gratuit.
+          </p>
+        </motion.div>
+      </section>
+    );
+  }
+
   return (
     <section className="min-h-[calc(100vh-80px)] bg-white">
-      {/* Ultra-thin progress line */}
       <div className="sticky top-0 z-40 bg-white">
         <div className="h-[1px] bg-[#e2e8f0]">
           <motion.div
@@ -391,7 +491,6 @@ export default function DevisConfigurator() {
 
       <div className="mx-auto max-w-7xl px-8 sm:px-12 lg:px-16 py-16 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          {/* Main configurator */}
           <div className="lg:col-span-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -400,434 +499,193 @@ export default function DevisConfigurator() {
               className="mb-12"
             >
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#0a0a0a] mb-4">
-                Configurez votre art de vivre
+                Votre projet, étape par étape
               </h1>
               <p className="text-lg text-[#64748b] font-light max-w-2xl leading-relaxed">
-                Un parcours simple et visuel pour obtenir votre devis personnalisé en quelques étapes.
+                Un parcours simple orienté vers vos besoins pour obtenir un devis personnalisé et un métré gratuit à domicile.
               </p>
             </motion.div>
 
             <div className="rounded-2xl bg-white border border-[#e2e8f0] shadow-ultra-soft overflow-hidden">
-              <div className="px-8 sm:px-10 py-8 border-b border-[#e2e8f0]">
-                <div className="flex items-baseline justify-between gap-6">
-                  <div>
-                    <p className="text-sm text-[#94a3b8] font-light">
-                      Étape {stepIndex + 1} / {steps.length}
-                    </p>
-                    <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-[#0a0a0a]">
-                      {step.title}
-                    </h2>
-                    <p className="mt-2 text-[#64748b] font-light">{step.subtitle}</p>
-                  </div>
-                </div>
-              </div>
-
-              <form onSubmit={onSubmit} className="relative p-8 sm:p-10">
+              <form onSubmit={onSubmit} className="relative">
                 <AnimatePresence mode="wait" custom={direction}>
-                  {step.id === "material" && (
-                    <motion.div
-                      key="material"
-                      custom={direction}
-                      variants={variants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      className="grid grid-cols-1 md:grid-cols-3 gap-6"
-                    >
-                      {materialCards.map((m) => {
-                        const selected = state.material === m.id;
-                        return (
-                          <motion.button
-                            key={m.id}
-                            type="button"
-                            whileHover={{ y: -4 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => {
-                              setState((s) => ({ ...s, material: m.id }));
-                            }}
-                            className={cn(
-                              "relative text-left rounded-2xl overflow-hidden border transition-all duration-300",
-                              selected
-                                ? "border-[#1e40af] shadow-ultra-soft"
-                                : "border-[#e2e8f0] hover:border-[#cbd5e1] hover:shadow-ultra-soft"
-                            )}
-                          >
-                            <div className="absolute inset-0">
-                              <div
-                                className="absolute inset-0 bg-cover bg-center"
-                                style={{ backgroundImage: `url(${m.texture})` }}
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/85 to-white/95" />
-                            </div>
+                  <motion.div
+                    key={`step-container-${step.id}`}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    className="transition-all duration-200 ease-in-out"
+                  >
+                    <div className="px-8 sm:px-10 py-8 border-b border-[#e2e8f0]">
+                      <p className="text-sm text-[#94a3b8] font-light">
+                        Étape {stepIndex + 1} / {steps.length}
+                      </p>
+                      <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-[#0a0a0a]">
+                        {step.title}
+                      </h2>
+                      <p className="mt-2 text-[#64748b] font-light">{step.subtitle}</p>
+                    </div>
 
-                            <div className="relative p-8 min-h-[200px] flex flex-col justify-between">
-                              <div>
-                                <h3 className="text-2xl font-bold tracking-tight text-[#0a0a0a]">
-                                  {m.label}
-                                </h3>
-                                <p className="mt-3 text-[#64748b] font-light leading-relaxed">
-                                  {m.description}
-                                </p>
-                              </div>
+                    <div className="p-8 sm:p-10">
+                      {step.id === "project" && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {projectCards.map((p) => {
+                            const selected = state.project === p.id;
+                            const Icon = p.icon;
+                            return renderSelectionCard({
+                              cardKey: `step-${step.id}-${p.id}`,
+                              selected,
+                              onClick: () => setState((s) => ({ ...s, project: p.id })),
+                              className: "p-8",
+                              children: (
+                                <>
+                                  <div className="w-12 h-12 rounded-xl border border-[#e2e8f0] bg-[#f9fafb] flex items-center justify-center mb-4">
+                                    <Icon className="h-6 w-6 text-[#1e40af]" />
+                                  </div>
+                                  <h3 className="text-xl font-bold tracking-tight text-[#0a0a0a] pr-8">{p.label}</h3>
+                                  <p className="mt-2 text-[#64748b] font-light">{p.description}</p>
+                                </>
+                              ),
+                            });
+                          })}
+                        </div>
+                      )}
 
-                              <div className="mt-6 flex items-center justify-between">
-                                <div className={cn("h-[1px] flex-1", selected ? "bg-[#1e40af]" : "bg-[#e2e8f0]")} />
-                                {selected && (
-                                  <motion.div
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="ml-4 inline-flex items-center gap-2 text-sm font-medium text-[#1e40af]"
-                                  >
-                                    <Check className="h-4 w-4" />
-                                    Sélectionné
-                                  </motion.div>
-                                )}
-                              </div>
-                            </div>
-                          </motion.button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
+                      {step.id === "priorities" && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {priorityCards.map((p) => {
+                            const selected = state.priorities.includes(p.id);
+                            const Icon = p.icon;
+                            return renderSelectionCard({
+                              cardKey: `step-${step.id}-${p.id}`,
+                              selected,
+                              onClick: () => toggleMulti("priorities", p.id),
+                              className: "p-8",
+                              children: (
+                                <>
+                                  <div className="w-12 h-12 rounded-xl border border-[#e2e8f0] bg-[#f9fafb] flex items-center justify-center mb-4">
+                                    <Icon className="h-6 w-6 text-[#1e40af]" />
+                                  </div>
+                                  <h3 className="text-lg font-bold tracking-tight text-[#0a0a0a] pr-8">{p.label}</h3>
+                                  <p className="mt-2 text-[#64748b] font-light text-sm">{p.description}</p>
+                                </>
+                              ),
+                            });
+                          })}
+                        </div>
+                      )}
 
-                  {step.id === "products" && (
-                    <motion.div
-                      key="products"
-                      custom={direction}
-                      variants={variants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                    >
-                      {productCards.map((p) => {
-                        const selected = state.products.includes(p.id);
-                        return (
-                          <motion.button
-                            key={p.id}
-                            type="button"
-                            whileHover={{ y: -4 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => {
-                              setState((s) => ({
-                                ...s,
-                                products: selected
-                                  ? s.products.filter((x) => x !== p.id)
-                                  : [...s.products, p.id],
-                              }));
-                              setSelectedBlueprint(p.id);
-                            }}
-                            className={cn(
-                              "group relative rounded-2xl border p-7 sm:p-8 text-left transition-all duration-300 bg-white",
-                              selected
-                                ? "border-[#1e40af] shadow-ultra-soft"
-                                : "border-[#e2e8f0] hover:border-[#cbd5e1] hover:shadow-ultra-soft"
-                            )}
-                          >
-                            <div className="flex items-start gap-6">
-                              <div
+                      {step.id === "elements" && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {elementCards.map((el) => {
+                            const selected = state.elements.includes(el.id);
+                            const Icon = el.icon;
+                            return renderSelectionCard({
+                              cardKey: `step-${step.id}-${el.id}`,
+                              selected,
+                              onClick: () => toggleMulti("elements", el.id),
+                              className: "p-8",
+                              children: (
+                                <>
+                                  <div className="w-12 h-12 rounded-xl border border-[#e2e8f0] bg-[#f9fafb] flex items-center justify-center mb-4">
+                                    <Icon className="h-6 w-6 text-[#1e40af]" />
+                                  </div>
+                                  <h3 className="text-lg font-bold tracking-tight text-[#0a0a0a] pr-8">{el.label}</h3>
+                                  <p className="mt-2 text-[#64748b] font-light text-sm">{el.description}</p>
+                                </>
+                              ),
+                            });
+                          })}
+                        </div>
+                      )}
+
+                      {step.id === "material" && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+                          {materialCards.map((m) => {
+                            const selected = state.material === m.id;
+                            const Icon = m.icon;
+                            return (
+                              <motion.button
+                                key={`step-${step.id}-${m.id}`}
+                                type="button"
+                                whileHover={{ y: -2 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => setState((s) => ({ ...s, material: m.id }))}
                                 className={cn(
-                                  "relative shrink-0 w-24 h-24 rounded-2xl border overflow-hidden bg-white",
-                                  selected ? "border-[#1e40af]" : "border-[#e2e8f0]"
+                                  "relative flex flex-col justify-between p-5 rounded-2xl border-2 transition-all duration-200 min-h-[220px] text-left cursor-pointer bg-white",
+                                  selected
+                                    ? "border-[#1e40af] shadow-md"
+                                    : "border-[#e2e8f0] hover:border-blue-600 hover:shadow-md"
                                 )}
                               >
-                                <div className="absolute inset-0 p-4">
-                                  <BlueprintDiagram
-                                    type={p.blueprint}
-                                    className="w-full h-full"
-                                    accent="architect"
-                                    animate={selected && selectedBlueprint === p.id}
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between gap-4">
-                                  <h3 className="text-xl font-bold tracking-tight text-[#0a0a0a]">
-                                    {p.label}
-                                  </h3>
-                                  {selected && (
-                                    <motion.div
-                                      initial={{ opacity: 0, scale: 0.9 }}
-                                      animate={{ opacity: 1, scale: 1 }}
-                                      className="inline-flex items-center gap-2 text-sm font-medium text-[#1e40af]"
-                                    >
-                                      <Check className="h-4 w-4" />
-                                    </motion.div>
+                                <div
+                                  className={cn(
+                                    "absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors",
+                                    selected
+                                      ? "bg-[#1e40af] text-white"
+                                      : "bg-slate-100 text-slate-400"
+                                  )}
+                                >
+                                  {selected ? (
+                                    <Check className="h-4 w-4" />
+                                  ) : (
+                                    <Icon className="h-4 w-4" />
                                   )}
                                 </div>
-                                <p className="mt-2 text-[#64748b] font-light">{p.description}</p>
-                              </div>
-                            </div>
-                          </motion.button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
 
-                  {step.id === "vitrage" && (
-                    <motion.div
-                      key="vitrage"
-                      custom={direction}
-                      variants={variants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      className="grid grid-cols-1 md:grid-cols-3 gap-6"
-                    >
-                      {vitrageCards.map((v) => {
-                        const selected = state.vitrage?.includes(v.id);
-                        const Icon = v.icon;
-                        return (
-                          <motion.button
-                            key={v.id}
-                            type="button"
-                            whileHover={{ y: -4 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => {
-                              setState((s) => ({
-                                ...s,
-                                vitrage: selected
-                                  ? (s.vitrage || []).filter((x) => x !== v.id)
-                                  : [...(s.vitrage || []), v.id],
-                              }));
-                            }}
-                            className={cn(
-                              "relative rounded-2xl border p-8 text-left transition-all duration-300 bg-white",
-                              selected
-                                ? "border-[#1e40af] shadow-ultra-soft"
-                                : "border-[#e2e8f0] hover:border-[#cbd5e1] hover:shadow-ultra-soft"
-                            )}
-                          >
-                            <div className="flex items-start justify-between gap-6">
-                              <div className="flex-1">
-                                <div className="w-12 h-12 rounded-xl border border-[#e2e8f0] bg-[#f9fafb] flex items-center justify-center mb-4">
-                                  <Icon className="h-6 w-6 text-[#1e40af]" />
+                                <div className="flex flex-col h-full justify-between pr-10">
+                                  <div>
+                                    <h4 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight mb-2">
+                                      {m.label}
+                                    </h4>
+                                  </div>
+                                  <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mt-auto">
+                                    {m.description}
+                                  </p>
                                 </div>
-                                <h3 className="text-xl font-bold tracking-tight text-[#0a0a0a] mb-2">
-                                  {v.label}
-                                </h3>
-                                <p className="text-[#64748b] font-light text-sm">{v.description}</p>
-                              </div>
-                              {selected && (
-                                <motion.div
-                                  initial={{ opacity: 0, scale: 0.9 }}
-                                  animate={{ opacity: 1, scale: 1 }}
-                                  className="inline-flex items-center gap-2 text-sm font-medium text-[#1e40af]"
-                                >
-                                  <Check className="h-4 w-4" />
-                                </motion.div>
-                              )}
-                            </div>
-                          </motion.button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
+                              </motion.button>
+                            );
+                          })}
+                        </div>
+                      )}
 
-                  {step.id === "finitions" && (
-                    <motion.div
-                      key="finitions"
-                      custom={direction}
-                      variants={variants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      className="grid grid-cols-1 md:grid-cols-3 gap-6"
-                    >
-                      {finitionCards.map((f) => {
-                        const selected = state.finitions === f.id;
-                        return (
-                          <motion.button
-                            key={f.id}
-                            type="button"
-                            whileHover={{ y: -4 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => {
-                              setState((s) => ({ ...s, finitions: f.id }));
-                            }}
-                            className={cn(
-                              "relative rounded-2xl overflow-hidden border transition-all duration-300",
-                              selected
-                                ? "border-[#1e40af] shadow-ultra-soft"
-                                : "border-[#e2e8f0] hover:border-[#cbd5e1] hover:shadow-ultra-soft"
-                            )}
-                          >
-                            <div className="relative h-48">
-                              <div
-                                className="absolute inset-0 bg-cover bg-center"
-                                style={{ backgroundImage: `url(${f.texture})` }}
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/70 to-white/95" />
-                            </div>
-                            <div className="p-6">
-                              <h3 className="text-xl font-bold tracking-tight text-[#0a0a0a] mb-2">
-                                {f.label}
-                              </h3>
-                              <p className="text-[#64748b] font-light text-sm">{f.description}</p>
-                              {selected && (
-                                <motion.div
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: 1 }}
-                                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#1e40af]"
-                                >
-                                  <Check className="h-4 w-4" />
-                                  Sélectionné
-                                </motion.div>
-                              )}
-                            </div>
-                          </motion.button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
+                      {step.id === "volume" && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {volumeCards.map((v) => {
+                            const selected = state.volume === v.id;
+                            return renderSelectionCard({
+                              cardKey: `step-${step.id}-${v.id}`,
+                              selected,
+                              onClick: () => setState((s) => ({ ...s, volume: v.id })),
+                              className: "p-8",
+                              children: (
+                                <>
+                                  <h3 className="text-xl font-bold tracking-tight text-[#0a0a0a] pr-8">{v.label}</h3>
+                                  <p className="mt-2 text-[#64748b] font-light text-sm">{v.description}</p>
+                                </>
+                              ),
+                            });
+                          })}
+                        </div>
+                      )}
 
-                  {step.id === "accessoires" && (
-                    <motion.div
-                      key="accessoires"
-                      custom={direction}
-                      variants={variants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                    >
-                      {accessoireCards.map((a) => {
-                        const selected = state.accessoires.includes(a.id);
-                        const Icon = a.icon;
-                        return (
-                          <motion.button
-                            key={a.id}
-                            type="button"
-                            whileHover={{ y: -4 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => {
-                              setState((s) => ({
-                                ...s,
-                                accessoires: selected
-                                  ? s.accessoires.filter((x) => x !== a.id)
-                                  : [...s.accessoires, a.id],
-                              }));
-                            }}
-                            className={cn(
-                              "relative rounded-2xl border p-8 text-left transition-all duration-300 bg-white",
-                              selected
-                                ? "border-[#1e40af] shadow-ultra-soft"
-                                : "border-[#e2e8f0] hover:border-[#cbd5e1] hover:shadow-ultra-soft"
-                            )}
-                          >
-                            <div className="flex items-start justify-between gap-6">
-                              <div className="flex-1">
-                                <div className="w-12 h-12 rounded-xl border border-[#e2e8f0] bg-[#f9fafb] flex items-center justify-center mb-4">
-                                  <Icon className="h-6 w-6 text-[#1e40af]" />
-                                </div>
-                                <h3 className="text-xl font-bold tracking-tight text-[#0a0a0a] mb-2">
-                                  {a.label}
-                                </h3>
-                                <p className="text-[#64748b] font-light text-sm">{a.description}</p>
-                              </div>
-                              {selected && (
-                                <motion.div
-                                  initial={{ opacity: 0, scale: 0.9 }}
-                                  animate={{ opacity: 1, scale: 1 }}
-                                  className="inline-flex items-center gap-2 text-sm font-medium text-[#1e40af]"
-                                >
-                                  <Check className="h-4 w-4" />
-                                </motion.div>
-                              )}
-                            </div>
-                          </motion.button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
+                      {step.id === "contact" && (
+                        <div className="space-y-10">
+                          <div className="rounded-xl bg-[#f0f7ff] border border-[#bfdbfe] px-6 py-4">
+                            <p className="text-sm text-[#1e40af] font-medium">
+                              Métré et devis gratuit à domicile sous 48h sans engagement.
+                            </p>
+                          </div>
 
-                  {step.id === "project" && (
-                    <motion.div
-                      key="project"
-                      custom={direction}
-                      variants={variants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                    >
-                      {projectCards.map((p) => {
-                        const selected = state.project === p.id;
-                        const Icon = p.icon;
-                        return (
-                          <motion.button
-                            key={p.id}
-                            type="button"
-                            whileHover={{ y: -4 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => {
-                              setState((s) => ({ ...s, project: p.id }));
-                            }}
-                            className={cn(
-                              "relative rounded-2xl border p-8 text-left transition-all duration-300 bg-white",
-                              selected
-                                ? "border-[#1e40af] shadow-ultra-soft"
-                                : "border-[#e2e8f0] hover:border-[#cbd5e1] hover:shadow-ultra-soft"
-                            )}
-                          >
-                            <div className="flex items-start justify-between gap-6">
-                              <div>
-                                <h3 className="text-2xl font-bold tracking-tight text-[#0a0a0a]">
-                                  {p.label}
-                                </h3>
-                                <p className="mt-3 text-[#64748b] font-light">{p.description}</p>
-                              </div>
-                              <div className="w-12 h-12 rounded-2xl border border-[#e2e8f0] bg-white flex items-center justify-center">
-                                <Icon
-                                  className={cn("h-5 w-5", selected ? "text-[#1e40af]" : "text-[#94a3b8]")}
-                                />
-                              </div>
-                            </div>
-                          </motion.button>
-                        );
-                      })}
-                    </motion.div>
-                  )}
-
-                  {step.id === "contact" && (
-                    <motion.div
-                      key="contact"
-                      custom={direction}
-                      variants={variants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      className="space-y-10"
-                    >
-                      {submitted ? (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4 }}
-                          className="rounded-2xl bg-white border border-[#e2e8f0] text-[#0a0a0a] p-10"
-                        >
-                          <p className="text-sm text-[#64748b] font-light mb-2">Merci</p>
-                          <h3 className="text-3xl font-bold tracking-tight">Demande envoyée.</h3>
-                          <p className="mt-3 text-[#64748b] font-light">
-                            Nous revenons vers vous très vite pour affiner votre configuration.
-                          </p>
-                        </motion.div>
-                      ) : (
-                        <>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <LineField
                               label="Nom complet"
                               icon={<User className="h-4 w-4" />}
                               value={state.name}
-                              placeholder="Jean Dupont"
+                              placeholder="Votre nom"
                               error={touched.name ? errors.name : undefined}
                               onBlur={() => setTouched((t) => ({ ...t, name: true }))}
                               onChange={(v) => setState((s) => ({ ...s, name: v }))}
@@ -842,19 +700,32 @@ export default function DevisConfigurator() {
                               onChange={(v) => setState((s) => ({ ...s, phone: v }))}
                             />
                           </div>
-                          <LineField
-                            label="Email"
-                            icon={<Mail className="h-4 w-4" />}
-                            value={state.email}
-                            placeholder="jean.dupont@example.com"
-                            error={touched.email ? errors.email : undefined}
-                            onBlur={() => setTouched((t) => ({ ...t, email: true }))}
-                            onChange={(v) => setState((s) => ({ ...s, email: v }))}
-                          />
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <LineField
+                              label="E-mail"
+                              icon={<Mail className="h-4 w-4" />}
+                              value={state.email}
+                              placeholder="votre@email.com"
+                              type="email"
+                              error={touched.email ? errors.email : undefined}
+                              onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+                              onChange={(v) => setState((s) => ({ ...s, email: v }))}
+                            />
+                            <LineField
+                              label="Code Postal / Commune"
+                              icon={<MapPin className="h-4 w-4" />}
+                              value={state.postalCode}
+                              placeholder="1300 Wavre"
+                              error={touched.postalCode ? errors.postalCode : undefined}
+                              onBlur={() => setTouched((t) => ({ ...t, postalCode: true }))}
+                              onChange={(v) => setState((s) => ({ ...s, postalCode: v }))}
+                            />
+                          </div>
 
                           <div>
                             <label className="block text-sm font-medium text-[#64748b] mb-2">
-                              Message (optionnel)
+                              Message / Précisions (optionnel)
                             </label>
                             <textarea
                               value={state.message}
@@ -864,15 +735,20 @@ export default function DevisConfigurator() {
                                 "w-full bg-transparent outline-none resize-none text-[#0a0a0a] placeholder:text-[#94a3b8]",
                                 "border-b border-[#e2e8f0] focus:border-[#1e40af] transition-colors pb-4"
                               )}
-                              placeholder="Quelques détails (mesures approximatives, contraintes, timing...)"
+                              placeholder="Contraintes, timing, détails sur votre projet..."
                             />
                           </div>
-                        </>
+
+                          {submitError && (
+                            <p className="text-sm text-red-500">{submitError}</p>
+                          )}
+                        </div>
                       )}
-                    </motion.div>
-                  )}
+                    </div>
+                  </motion.div>
                 </AnimatePresence>
 
+                <div className="px-8 sm:px-10 pb-8 sm:pb-10">
                 <div className="mt-12 flex items-center justify-between gap-4 pt-8 border-t border-[#e2e8f0]">
                   {stepIndex > 0 && (
                     <Button
@@ -881,6 +757,7 @@ export default function DevisConfigurator() {
                       variant="outline"
                       size="lg"
                       className="px-8 py-4 rounded-xl"
+                      disabled={submitting}
                     >
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Retour
@@ -917,10 +794,13 @@ export default function DevisConfigurator() {
                         disabled={!canProceed || submitting}
                       >
                         {submitting ? (
-                          "Envoi en cours..."
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Envoi en cours...
+                          </>
                         ) : (
                           <>
-                            Envoyer la demande
+                            Envoyer ma demande
                             <Send className="ml-2 h-4 w-4" />
                           </>
                         )}
@@ -928,23 +808,11 @@ export default function DevisConfigurator() {
                     </motion.div>
                   )}
                 </div>
+                </div>
               </form>
             </div>
-
-            {/* Section réassurance */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-8 text-center"
-            >
-              <p className="text-sm text-[#94a3b8] font-light">
-                Votre configuration sera analysée sous 24h par notre bureau technique de Wavre.
-              </p>
-            </motion.div>
           </div>
 
-          {/* Summary sidebar - Sticky */}
           <div className="lg:col-span-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -954,79 +822,34 @@ export default function DevisConfigurator() {
             >
               <h3 className="text-lg font-bold tracking-tight text-[#0a0a0a] mb-6">Résumé</h3>
               <div className="space-y-4">
-                {summary.materialLabel && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded border border-[#e2e8f0] bg-white flex items-center justify-center shrink-0 mt-0.5">
-                      <Sparkles className="h-3 w-3 text-[#1e40af]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-[#94a3b8] font-light mb-1">Matériau</p>
-                      <p className="text-sm font-medium text-[#0a0a0a]">{summary.materialLabel}</p>
-                    </div>
-                  </div>
-                )}
-                {summary.productLabels.length > 0 && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded border border-[#e2e8f0] bg-white flex items-center justify-center shrink-0 mt-0.5">
-                      <Check className="h-3 w-3 text-[#1e40af]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-[#94a3b8] font-light mb-1">Produits</p>
-                      <p className="text-sm font-medium text-[#0a0a0a]">{summary.productLabels.join(", ")}</p>
-                    </div>
-                  </div>
-                )}
-                {summary.vitrageLabels && summary.vitrageLabels.length > 0 && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded border border-[#e2e8f0] bg-white flex items-center justify-center shrink-0 mt-0.5">
-                      <Sun className="h-3 w-3 text-[#1e40af]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-[#94a3b8] font-light mb-1">Vitrage</p>
-                      <p className="text-sm font-medium text-[#0a0a0a]">{summary.vitrageLabels.join(", ")}</p>
-                    </div>
-                  </div>
-                )}
-                {summary.finitionLabel && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded border border-[#e2e8f0] bg-white flex items-center justify-center shrink-0 mt-0.5">
-                      <TreePine className="h-3 w-3 text-[#1e40af]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-[#94a3b8] font-light mb-1">Finition</p>
-                      <p className="text-sm font-medium text-[#0a0a0a]">{summary.finitionLabel}</p>
-                    </div>
-                  </div>
-                )}
-                {summary.accessoireLabels.length > 0 && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded border border-[#e2e8f0] bg-white flex items-center justify-center shrink-0 mt-0.5">
-                      <Zap className="h-3 w-3 text-[#1e40af]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-[#94a3b8] font-light mb-1">Accessoires</p>
-                      <p className="text-sm font-medium text-[#0a0a0a]">{summary.accessoireLabels.join(", ")}</p>
-                    </div>
-                  </div>
-                )}
                 {summary.projectLabel && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded border border-[#e2e8f0] bg-white flex items-center justify-center shrink-0 mt-0.5">
-                      <ArrowRight className="h-3 w-3 text-[#1e40af]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-[#94a3b8] font-light mb-1">Projet</p>
-                      <p className="text-sm font-medium text-[#0a0a0a]">{summary.projectLabel}</p>
-                    </div>
-                  </div>
+                  <SummaryItem label="Projet" value={summary.projectLabel} icon={Home} />
                 )}
-                {!summary.materialLabel &&
-                  summary.productLabels.length === 0 &&
-                  !summary.finitionLabel &&
-                  summary.accessoireLabels.length === 0 &&
-                  !summary.projectLabel && (
-                    <p className="text-sm text-[#94a3b8] font-light">Votre configuration apparaîtra ici</p>
-                  )}
+                {summary.priorityLabels.length > 0 && (
+                  <SummaryItem
+                    label="Priorités"
+                    value={summary.priorityLabels.join(", ")}
+                    icon={Sparkles}
+                  />
+                )}
+                {summary.elementLabels.length > 0 && (
+                  <SummaryItem
+                    label="Éléments"
+                    value={summary.elementLabels.join(", ")}
+                    icon={Check}
+                  />
+                )}
+                {summary.materialLabel && (
+                  <SummaryItem label="Matériau" value={summary.materialLabel} icon={Layers} />
+                )}
+                {summary.volumeLabel && (
+                  <SummaryItem label="Volume" value={summary.volumeLabel} icon={PanelTop} />
+                )}
+                {!hasSummary && (
+                  <p className="text-sm text-[#94a3b8] font-light">
+                    Vos choix apparaîtront ici au fur et à mesure.
+                  </p>
+                )}
               </div>
             </motion.div>
           </div>

@@ -79,7 +79,7 @@ export default function HeritageSection() {
                   className="text-[10px] font-light text-[#1F2937]/60 uppercase tracking-[0.2em]"
                   style={{ fontFamily: "var(--font-sans), system-ui, sans-serif", fontWeight: 300 }}
                 >
-                  25 ans de savoir-faire | +1500 projets réalisés
+                  15+ années d'expérience | +1 500 chantiers résidentiels
                 </p>
               </motion.div>
 

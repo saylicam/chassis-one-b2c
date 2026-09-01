@@ -95,20 +95,20 @@ const LocationPinIcon = () => (
 const stats = [
   {
     value: 15,
-    suffix: "",
-    label: "SAVOIR-FAIRE ÉTABLI",
+    suffix: "+",
+    label: "ANNÉES D'EXPÉRIENCE",
     icon: CompassIcon,
   },
   {
-    value: 1000,
+    value: 1500,
     suffix: "+",
-    label: "CHANTIERS",
+    label: "CHANTIERS RÉSIDENTIELS",
     icon: FloorPlanIcon,
   },
   {
-    value: 100,
+    value: 98,
     suffix: "%",
-    label: "WAVRIEN",
+    label: "SATISFACTION CLIENT",
     icon: LocationPinIcon,
   },
 ];

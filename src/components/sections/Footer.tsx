@@ -11,10 +11,10 @@ const footerLinks = {
     { label: "Portes d'Entrée", href: "/portes" },
   ],
   navigation: [
-    { label: "À propos", href: "#apropos" },
+    { label: "À propos", href: "/#apropos" },
     { label: "Réalisations", href: "/realisations" },
     { label: "Devis", href: "/devis" },
-    { label: "Garanties", href: "#apropos" },
+    { label: "Garanties", href: "/#garanties" },
   ],
 };
 
@@ -24,15 +24,6 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const scrollToSection = (href: string) => {
-    if (href.startsWith("#")) {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
-
   return (
     <footer className="bg-[#1A1A1A] text-white">
       <div className="mx-auto max-w-7xl px-8 sm:px-12 lg:px-16 py-20 lg:py-28">
@@ -108,12 +99,6 @@ export default function Footer() {
                 <li key={index}>
                   <Link
                     href={link.href}
-                    onClick={(e) => {
-                      if (link.href.startsWith("#")) {
-                        e.preventDefault();
-                        scrollToSection(link.href);
-                      }
-                    }}
                     className="text-sm text-[#b5b5b5] hover:text-white transition-colors duration-300 font-light"
                     style={{
                       fontFamily: "var(--font-sans), system-ui, sans-serif",
