@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import Image from "next/image";
-import { Factory, Handshake, Lightbulb, Users, Award } from "lucide-react";
+import { Factory, Handshake, Lightbulb, Users, Award, Phone, FileText, Wrench, ShieldCheck } from "lucide-react";
 
 // Timeline data
 const timelineEvents = [
@@ -38,27 +38,46 @@ const timelineEvents = [
   },
 ];
 
-// Équipe — rôles d'experts
-const teamMembers = [
+const projectSteps = [
   {
-    role: "Conseiller Métreur & Rénovation",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&auto=format&q=90",
-    description: "Étude sur site et accompagnement personnalisé",
+    step: "01",
+    id: "contact-metre",
+    title: "Prise de contact & métré gratuit",
+    description:
+      "Vous nous contactez, nous organisons une visite technique gratuite et sans engagement à votre domicile.",
+    icon: Phone,
   },
   {
-    role: "Chef d'Équipe Pose Agréé",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&auto=format&q=90",
-    description: "Pose certifiée et finitions impeccables",
+    step: "02",
+    id: "devis",
+    title: "Devis personnalisé sous 48h",
+    description:
+      "Notre bureau technique de Wavre analyse votre projet et vous transmet un chiffrage détaillé.",
+    icon: FileText,
   },
   {
-    role: "Responsable Suivi Client",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&auto=format&q=90",
-    description: "Un interlocuteur unique de A à Z",
+    step: "03",
+    id: "fabrication",
+    title: "Fabrication chez Sofarau",
+    description:
+      "Vos châssis sont fabriqués sur mesure dans notre unité de production locale à Wavre, avec la technologie Schüco.",
+    icon: Factory,
   },
   {
-    role: "Expert Technique Châssis",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&auto=format&q=90",
-    description: "Conseil matériaux et performance énergétique",
+    step: "04",
+    id: "pose",
+    title: "Pose par nos artisans certifiés",
+    description:
+      "Installation professionnelle, propre et soignée, par notre équipe locale.",
+    icon: Wrench,
+  },
+  {
+    step: "05",
+    id: "suivi-garantie",
+    title: "Suivi & garantie 10 ans",
+    description:
+      "Un interlocuteur unique pour le SAV, et une garantie de 10 ans sur la pose et les matériaux.",
+    icon: ShieldCheck,
   },
 ];
 
@@ -130,7 +149,7 @@ export default function NotreHistoirePage() {
 
                   return (
                     <motion.div
-                      key={index}
+                      key={event.year}
                       initial={{ opacity: 0, y: 40 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: "-100px" }}
@@ -284,7 +303,7 @@ export default function NotreHistoirePage() {
           </div>
         </section>
 
-        {/* Les Visages - Galerie de portraits */}
+        {/* Comment se déroule votre projet */}
         <section className="py-20 lg:py-32 bg-white">
           <div className="mx-auto max-w-7xl px-8 lg:px-16">
             <motion.div
@@ -295,42 +314,68 @@ export default function NotreHistoirePage() {
               className="text-center mb-16 lg:mb-24"
             >
               <h2 className="text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-4 tracking-tight">
-                Les Visages
+                Comment se déroule votre projet
               </h2>
               <p className="text-lg text-[#64748b] font-light max-w-2xl mx-auto">
-                L'équipe locale qui donne vie à chaque projet avec passion et expertise
+                De la prise de contact à la garantie, un accompagnement complet par notre équipe locale
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {teamMembers.map((member, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
-                >
-                  <div className="bg-white rounded-2xl overflow-hidden border border-[#e2e8f0] hover:border-[#cbd5e1] transition-colors">
-                    <div className="relative aspect-square overflow-hidden">
-                      <Image
-                        src={member.image}
-                        alt={member.role}
-                        fill
-                        className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      />
-                    </div>
-                    <div className="p-6 text-center">
-                      <h3 className="text-lg font-bold text-[#0a0a0a] mb-2">
-                        {member.role}
-                      </h3>
-                      <p className="text-sm text-[#64748b] font-light">{member.description}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="relative">
+              <div className="absolute left-8 lg:left-1/2 top-0 bottom-0 w-[1px] bg-gray-200 hidden lg:block" />
+
+              <div className="space-y-16 lg:space-y-24">
+                {projectSteps.map((step, index) => {
+                  const IconComponent = step.icon;
+                  const isEven = index % 2 === 0;
+
+                  return (
+                    <motion.div
+                      key={step.id}
+                      initial={{ opacity: 0, y: 40 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      className={`relative flex flex-col lg:flex-row items-start lg:items-center gap-8 ${
+                        isEven ? "lg:flex-row" : "lg:flex-row-reverse"
+                      }`}
+                    >
+                      <div className="absolute left-8 lg:left-1/2 top-8 transform -translate-x-1/2 z-10">
+                        <div className="w-4 h-4 rounded-full bg-[#1e40af] border-4 border-white shadow-lg" />
+                      </div>
+
+                      <div
+                        className={`flex-1 lg:w-1/2 ${
+                          isEven ? "lg:pr-16 lg:text-right" : "lg:pl-16 lg:text-left"
+                        }`}
+                      >
+                        <div
+                          className={`flex items-center gap-4 mb-4 ${
+                            isEven ? "lg:justify-end" : "lg:justify-start"
+                          }`}
+                        >
+                          <div className="w-12 h-12 rounded-lg bg-[#1e40af]/10 flex items-center justify-center">
+                            <IconComponent className="h-6 w-6 text-[#1e40af]" />
+                          </div>
+                          <div>
+                            <span className="text-sm font-semibold text-[#1e40af] uppercase tracking-wider">
+                              Étape {step.step}
+                            </span>
+                            <h3 className="text-2xl lg:text-3xl font-bold text-[#0a0a0a] mt-1">
+                              {step.title}
+                            </h3>
+                          </div>
+                        </div>
+                        <p className="text-[#64748b] font-light leading-relaxed text-lg">
+                          {step.description}
+                        </p>
+                      </div>
+
+                      <div className="hidden lg:block lg:w-1/2" />
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
