@@ -12,6 +12,35 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/nos-produits",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/atelier",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/volets-roulants",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/presentation",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/contact",
+        destination: "/#contact",
+        permanent: true,
+      },
+    ];
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

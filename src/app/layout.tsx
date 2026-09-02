@@ -15,22 +15,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Châssis One - Expert en Pose de Châssis et Menuiserie à Wavre",
+  title: "Châssis One | Châssis PVC & Alu, Portes et Volets à Wavre",
   description:
-    "Châssis One, expert en pose de châssis PVC et aluminium, portes d'entrée, volets roulants et moustiquaires à Wavre. Fabrication 100% belge, garantie 10 ans. Demande de devis.",
+    "Fabricant et installateur de châssis PVC et aluminium, portes d'entrée et volets à Wavre et en Brabant Wallon. Pose certifiée, fabrication belge et devis gratuit en ligne sous 48h.",
   keywords: [
     "châssis Wavre",
-    "menuiserie Wavre",
-    "châssis PVC Wavre",
+    "châssis PVC Brabant Wallon",
     "châssis aluminium Wavre",
-    "pose de châssis Wavre",
-    "portes d'entrée Wavre",
+    "portes et fenêtres Wavre",
+    "portes d'entrée Brabant Wallon",
     "volets roulants Wavre",
-    "moustiquaires Wavre",
-    "menuiserie Brabant wallon",
-    "châssis Brabant wallon",
+    "baies vitrées Wavre",
+    "rénovation châssis Brabant Wallon",
+    "installateur châssis Wavre",
+    "devis châssis gratuit",
+    "menuiserie Wavre",
+    "Châssis One",
     "Sofarau",
-    "fabrication belge",
+    "fabrication belge châssis",
   ],
   authors: [{ name: "Châssis One" }],
   creator: "Châssis One",
@@ -40,15 +42,15 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://chassisone.be"),
+  metadataBase: new URL("https://www.chassisone.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Châssis One - Expert en Pose de Châssis et Menuiserie à Wavre",
+    title: "Châssis One | Châssis PVC & Alu, Portes et Volets à Wavre",
     description:
-      "Châssis One, expert en pose de châssis PVC et aluminium, portes d'entrée, volets roulants et moustiquaires à Wavre. Fabrication 100% belge, garantie 10 ans.",
-    url: "https://chassisone.be",
+      "Fabricant et installateur de châssis PVC et aluminium, portes d'entrée et volets à Wavre et en Brabant Wallon. Devis gratuit en ligne.",
+    url: "https://www.chassisone.com",
     siteName: "Châssis One",
     locale: "fr_BE",
     type: "website",
@@ -57,15 +59,15 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Châssis One - Expert en Menuiserie à Wavre",
+        alt: "Châssis One — Châssis, portes et volets à Wavre",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Châssis One - Expert en Pose de Châssis et Menuiserie à Wavre",
+    title: "Châssis One | Châssis PVC & Alu, Portes et Volets à Wavre",
     description:
-      "Châssis One, expert en pose de châssis PVC et aluminium, portes d'entrée, volets roulants et moustiquaires à Wavre.",
+      "Fabricant et installateur de châssis, portes et volets à Wavre et en Brabant Wallon. Devis gratuit en ligne.",
     images: ["/og-image.jpg"],
   },
   robots: {

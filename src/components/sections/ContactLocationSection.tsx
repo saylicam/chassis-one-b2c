@@ -39,7 +39,7 @@ export default function ContactLocationSection() {
   }, []);
 
   return (
-    <section className="bg-[#FFFFFF] text-[#0a0a0a]">
+    <section id="contact" className="bg-[#FFFFFF] text-[#0a0a0a]">
       <div className="mx-auto max-w-7xl px-8 lg:px-16 py-16 lg:py-24">
         <motion.h2
           initial={{ opacity: 0, y: 12 }}

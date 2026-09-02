@@ -187,9 +187,35 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar - Copyright Signature */}
+        {/* Bottom Bar - Copyright & Legal */}
         <div className="border-t border-[#2a2a2a] pt-8">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-1">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+              <Link
+                href="/mentions-legales"
+                className="text-xs text-[#b5b5b5] hover:text-white transition-colors duration-300 font-light"
+                style={{
+                  fontFamily: "var(--font-sans), system-ui, sans-serif",
+                  fontWeight: 300,
+                }}
+              >
+                Mentions légales
+              </Link>
+              <span className="text-xs text-[#2a2a2a] hidden sm:inline" aria-hidden>
+                |
+              </span>
+              <Link
+                href="/politique-de-confidentialite"
+                className="text-xs text-[#b5b5b5] hover:text-white transition-colors duration-300 font-light"
+                style={{
+                  fontFamily: "var(--font-sans), system-ui, sans-serif",
+                  fontWeight: 300,
+                }}
+              >
+                Politique de confidentialité
+              </Link>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-1">
             <p 
               className="text-xs text-[#b5b5b5] font-light text-center"
               style={{
@@ -223,6 +249,7 @@ export default function Footer() {
                 </span>
               </a>
             </p>
+            </div>
           </div>
         </div>
       </div>
